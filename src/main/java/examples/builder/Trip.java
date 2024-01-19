@@ -3,19 +3,19 @@ package examples.builder;
 import java.time.LocalDate;
 
 public class Trip {
-    public final LocalDate startDate;
-    public final LocalDate endDate;
-    public final int duration;
-    public final int numberTravellers;
-    public final int numberKids;
-    public final int minimumStars;
-    public final int minimumRecommendations;
-    public final int rating;
-    public final int minimumNumberRatings;
+    public LocalDate startDate;
+    public LocalDate endDate;
+    public int duration;
+    public int numberTravellers;
+    public int numberKids;
+    public int minimumStars;
+    public int minimumRecommendations;
+    public int rating;
+    public int minimumNumberRatings;
     Trip(LocalDate startDate, LocalDate endDate,
          int duration, int numberTravellers,
          int numberKids, int minimumStars,
-         int minimumRecommmendations,
+         int minimumRecommendations,
          int rating, int minimumNumberRatings)
     {
         this.startDate = startDate;
@@ -27,6 +27,10 @@ public class Trip {
         this.minimumRecommendations = minimumRecommendations;
         this.rating = rating;
         this.minimumNumberRatings = minimumNumberRatings;
+    }
+
+    Trip(Trip.Builder builder) {
+
     }
 
 

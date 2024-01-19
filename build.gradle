@@ -6,7 +6,7 @@ group = 'com.billwright'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '14'
+    sourceCompatibility = '17'
 }
 
 repositories {
