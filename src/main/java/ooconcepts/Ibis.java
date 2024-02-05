@@ -13,6 +13,6 @@ public class Ibis extends Animal {
     }
 
     public void fly() {
-        System.out.println("I'm flying!");
+        System.out.println("I'm flapping my " + featherColor + " feathers!");
     }
 }
