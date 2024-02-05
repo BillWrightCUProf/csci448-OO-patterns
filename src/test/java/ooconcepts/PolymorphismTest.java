@@ -14,12 +14,17 @@ public class PolymorphismTest {
         List<Animal> animals = List.of(hippo, ibis);
         for (Animal animal : animals) {
             System.out.println(animal);
-//            animal.eat();
-//            animal.makeNoise();
-//            animal.roam();
+
+            animal.eat();
+            animal.makeNoise();
+            animal.roam();
+
             animal.doAllThree();
             System.out.println("-------------------");
         }
+
+        ibis.fly();
+        hippo.submerge();
 
     }
 }

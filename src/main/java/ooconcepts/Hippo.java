@@ -13,7 +13,12 @@ public class Hippo extends Animal {
     }
 
     public void eat() {
-        isSubmerged = true;
+        submerge();
         super.eat();
+    }
+
+    public void submerge() {
+        isSubmerged = true;
+        System.out.println("I'm underwater!");
     }
 }

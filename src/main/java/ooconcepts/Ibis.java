@@ -11,4 +11,8 @@ public class Ibis extends Animal {
     public void makeNoise() {
         System.out.println("Tweet");
     }
+
+    public void fly() {
+        System.out.println("I'm flying!");
+    }
 }
