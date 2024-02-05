@@ -15,10 +15,14 @@ public class TicTacToe {
 //        }
     }
 
-    public void makeMove(String playerCharacter, Integer row, Integer column) {
+    public void makeMove(String marker, Integer row, Integer column) {
         int index = row * 3 + column;
-        board.set(index, playerCharacter);
-        board.put(makeKey(row, column), playerCharacter);
+//        board.set(index, marker);
+        board.put(makeKey(row, column), marker);
+    }
+
+    public String getMarker(Integer row, Integer column) {
+        return board.getOrDefault(makeKey(row, column), " ");
     }
 
     public String makeKey(Integer row, Integer column) {
