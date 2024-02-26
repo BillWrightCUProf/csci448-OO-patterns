@@ -1,4 +1,4 @@
-package ooconcepts;
+package ooconcepts.trucks;
 
 public abstract class Truck {
     Engine engine;

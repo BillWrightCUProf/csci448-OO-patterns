@@ -1,4 +1,4 @@
-package ooconcepts;
+package ooconcepts.animals;
 
 public class Hippo extends Animal {
 

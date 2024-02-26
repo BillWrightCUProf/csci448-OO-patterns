@@ -1,4 +1,4 @@
-package ooconcepts;
+package ooconcepts.animals;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ooconcepts;
+package ooconcepts.trucks;
 
 public class Ford extends Truck {
 
