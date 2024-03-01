@@ -15,10 +15,10 @@ public class CollectionComparisonTest {
         hippos.add(new Hippo("Harry", "grass", "river"));
 
         // This is okay, as it creates a new list of animals from the list of hippos
-        List<Animal> animals = new ArrayList<>(hippos);
+//        List<Animal> animals = new ArrayList<>(hippos);
 
         // This is not okay, as it tries to assign a list of hippos to a list of animals
-         List<Animal> animals = hippos;
+//         List<Animal> animals = hippos;
     }
 
 }
