@@ -1,5 +1,6 @@
 from CommandPattern import Command, Sandwich, SandwichCommand
 
+
 class MealInvoker:
     # Has a reference to the Command, and can execute the method
 
@@ -25,13 +26,14 @@ class MealInvoker:
     def invoke(self):
         self._command.execute()
 
+
 if __name__ == "__main__":
     # Command pattern in action
     sandwich = Sandwich()  # receiver
     command_sandwich = SandwichCommand(sandwich)  # concrete command
 
     meal_invoker = MealInvoker(command_sandwich)  # invoker
-    meal_invoker.invoke() # Execute one command
+    meal_invoker.invoke()  # Execute one command
 
     meal_invoker.add_command_to_list(command_sandwich)
     meal_invoker.execute_commands()  # Execute all commands in the list
