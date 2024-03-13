@@ -1,18 +1,21 @@
 package examples.decorator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Beverage2 {
     public enum Size { TALL, GRANDE, VENTI }
     Size size = Size.TALL;
 
-    List<Condiments> condiments = new ArrayList<Condiments>();
+    List<Condiment> condiments = new ArrayList<Condiment>();
 
-    void addCondiment(Condiments condiment) {
+    void addCondiment(Condiment condiment) {
         condiments.add(condiment);
     }
 
     String getDescription() {
         String desc = "";
-        for (Condiments condiment : condiments) {
+        for (Condiment condiment : condiments) {
             desc += condiment.getDescription() + ", ";
         }
         return desc;
@@ -20,7 +23,7 @@ public class Beverage2 {
 
     Double getCost() {
         Double totalCost = 0.0;
-        for (Condiments condiment : condiments) {
+        for (Condiment condiment : condiments) {
             totalCost += condiment.getCost();
         }
         return totalCost;
@@ -35,10 +38,4 @@ public class Beverage2 {
         this.size = size;
     }
 
-    public Double getCost() {
-        return cost;
-    }
-    public String getDescription() {
-        return description;
-    }
 }
