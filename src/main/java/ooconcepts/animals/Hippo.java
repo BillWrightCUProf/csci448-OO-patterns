@@ -4,6 +4,10 @@ public class Hippo extends Animal {
 
     private Boolean isSubmerged = false;
 
+    public Hippo() {
+        super("Hippo", "grass", "water");
+    }
+
     public Hippo(String name, String foodType, String location) {
         super(name, foodType, location);
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="hippo" class="ooconcepts.animals.Hippo"></bean>
+    <bean id="ibis" class="ooconcepts.animals.Ibis"></bean>
+    <bean id="wold" class="ooconcepts.animals.Wolf"></bean>
+
+    <bean id="zoo" class="ooconcepts.animals.Zoo">
+        <constructor-arg>
+            <list>
+                <ref bean="hippo"/>
+                <ref bean="ibis"/>
+                <ref bean="wold"/>
+            </list>
+        </constructor-arg>
+    </bean>
+</beans>
