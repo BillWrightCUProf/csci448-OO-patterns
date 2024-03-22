@@ -9,7 +9,7 @@ public class ContainingClass {
         System.out.println("ContainingClassStuff");
     }
 
-    public class InnerClass {
+    private class InnerClass {
         String name = "InnerClass";
 
         public void printNames() {
@@ -26,6 +26,11 @@ public class ContainingClass {
 
     InnerClass createInnerClass() {
         return new InnerClass();
+    }
+
+    public class AnotherInnerClass2 extends InnerClass {
+        String name = "AnotherInnerClass";
+        Integer id = 456;
     }
 
     public class MultipleInheritanceInnerClass extends SeparateClass {
@@ -71,7 +76,7 @@ public class ContainingClass {
         innerClass2.printNames();
 
         // We cannot do this:
-        //ContainingClass.InnerClass innerClass3 = new ContainingClass.InnerClass();
+//        ContainingClass.InnerClass innerClass3 = new ContainingClass.InnerClass();
 
         ContainingClass.MultipleInheritanceInnerClass multipleInheritanceInnerClass = containingClass.new MultipleInheritanceInnerClass();
         multipleInheritanceInnerClass.printNames();
