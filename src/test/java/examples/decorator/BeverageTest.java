@@ -14,11 +14,11 @@ class BeverageTest {
 
         Beverage mochaEspresso = new Mocha(espresso);
         assertEquals("Espresso, Mocha", mochaEspresso.getDescription());
-        assertEquals(2.19, mochaEspresso.getCost());
+        assertEquals(2.39, mochaEspresso.getCost());
 
         Beverage whippedCreamMochaEspresso = new WhippedCream(mochaEspresso);
         assertEquals("Espresso, Mocha, Whipped Cream", whippedCreamMochaEspresso.getDescription());
-        assertEquals(2.69, whippedCreamMochaEspresso.getCost());
+        assertEquals(2.89, whippedCreamMochaEspresso.getCost());
     }
 
 }
