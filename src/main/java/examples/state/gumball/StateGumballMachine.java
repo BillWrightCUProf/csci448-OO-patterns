@@ -1,12 +1,15 @@
 package examples.state.gumball;
 
+import java.util.Random;
+
 public class StateGumballMachine {
     State soldOutState;
     State noQuarterState;
     State hasQuarterState;
     State soldState;
+    State winnerState;
 
-    State state;
+    State currentState;
     int count = 0;
 
     public StateGumballMachine(int numberGumballs) {
@@ -14,26 +17,27 @@ public class StateGumballMachine {
         noQuarterState = new NoQuarterState(this);
         hasQuarterState = new HasQuarterState(this);
         soldState = new SoldState(this);
+        winnerState = new WinnerState(this);
 
         this.count = numberGumballs;
         if (numberGumballs > 0) {
-            state = noQuarterState;
+            currentState = noQuarterState;
         } else {
-            state = soldOutState;
+            currentState = soldOutState;
         }
     }
 
     public void insertQuarter() {
-        state.insertQuarter();
+        currentState.insertQuarter();
     }
 
     public void ejectQuarter() {
-        state.ejectQuarter();
+        currentState.ejectQuarter();
     }
 
     public void turnCrank() {
-        state.turnCrank();
-        state.dispense();
+        currentState.turnCrank();
+        currentState.dispense();
     }
 
     void releaseBall() {
@@ -50,14 +54,14 @@ public class StateGumballMachine {
     void refill(int count) {
         this.count += count;
         System.out.println("The gumball machine was just refilled; its new count is: " + this.count);
-        state.refill();
+        currentState.refill();
     }
 
-    void setState(State state) {
-        this.state = state;
+    void setState(State currentState) {
+        this.currentState = currentState;
     }
     public State getState() {
-        return state;
+        return currentState;
     }
 
     public State getSoldOutState() {
@@ -76,6 +80,10 @@ public class StateGumballMachine {
         return soldState;
     }
 
+    public State getWinnerState() {
+        return winnerState;
+    }
+
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append("\nMighty Gumball, Inc.");
@@ -85,7 +93,7 @@ public class StateGumballMachine {
             result.append("s");
         }
         result.append("\n");
-        result.append("Machine is " + state + "\n");
+        result.append("Machine is " + currentState + "\n");
         return result.toString();
     }
 }

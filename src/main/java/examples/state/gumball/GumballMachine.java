@@ -1,10 +1,15 @@
 package examples.state.gumball;
 
+import java.util.Random;
+
 public class GumballMachine {
+    Random randomWinner = new Random(System.currentTimeMillis());
+
     final static int SOLD_OUT = 0;
     final static int NO_QUARTER = 1;
     final static int HAS_QUARTER = 2;
     final static int SOLD = 3;
+    final static int WINNER = 4;
 
     int state = SOLD_OUT;
     int count = 0;
@@ -55,16 +60,25 @@ public class GumballMachine {
         } else if (state == SOLD_OUT) {
             System.out.println("You turned, but there are no gumballs");
         } else if (state == HAS_QUARTER) {
+            int winner = randomWinner.nextInt(10);
+            if ((winner == 0) && (count > 1)) {
+                state = WINNER;
+            } else {
+                state = SOLD;
+            }
             System.out.println("You turned...");
-            state = SOLD;
             dispense();
         }
     }
 
     private void dispense() {
-        if (state == SOLD) {
+        if (state == SOLD || state == WINNER) {
             System.out.println("A gumball comes rolling out the slot");
             count = count - 1;
+            if (state == WINNER) {
+                System.out.println("YOU'RE A WINNER! You got two gumballs for your quarter");
+                count = count - 1;
+            }
             if (count == 0) {
                 System.out.println("Oops, out of gumballs!");
                 state = SOLD_OUT;
