@@ -21,8 +21,9 @@ dependencies {
     implementation 'com.google.inject:guice:5.0.1'
     implementation 'org.springframework:spring-context:5.3.15'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
     testImplementation 'io.cucumber:cucumber-java:6.10.4'
     testImplementation 'io.cucumber:cucumber-groovy:6.10.4'
     testImplementation 'org.apache.groovy:groovy:4.0.3'
@@ -33,7 +34,9 @@ configurations {
         extendsFrom testImplementation
     }
 }
+
 task cucumberCli() {
+    println("REGISTER cucumberCli: This is executed during the configuration phase")
     dependsOn assemble, testClasses
     doLast {
         javaexec {
