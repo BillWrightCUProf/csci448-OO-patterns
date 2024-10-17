@@ -10,5 +10,4 @@ public class NeighborhoodBadNames {
         this.l = l;
         this.d = d;
     }
-
 }

@@ -1,16 +1,31 @@
 package ooconcepts.innerclasses;
 
 public class ContainingClass {
-    String name = "ContainingClass";
-    String uniqueName = "UniqueContainingClass";
+    private String name = "ContainingClass";
+    private String uniqueName = "UniqueContainingClass";
+    private Integer id = 123;
+
+    public ContainingClass() {
+        System.out.println("ContainingClass constructor");
+        id = 246;
+    }
 
     void doContainingClassInstanceStuff() {
         name += "Augmented";
         System.out.println("ContainingClassStuff");
     }
 
-    private class InnerClass {
+    InnerClass createInnerClass() {
+        return new InnerClass();
+    }
+
+    class InnerClass {
         String name = "InnerClass";
+
+        public void setContainingClassPrivateName(String name) {
+            // This line is only allowed for non
+            ContainingClass.this.name = name;
+        }
 
         public void printNames() {
             System.out.println(name);
@@ -18,15 +33,15 @@ public class ContainingClass {
             // We can directly reference the containing class's instance variables
             System.out.println(uniqueName);
 
+            System.out.println(id);
+
             // And we can call the containing class's instance methods
             doContainingClassInstanceStuff();
             System.out.println(ContainingClass.this.name);
         }
     }
 
-    InnerClass createInnerClass() {
-        return new InnerClass();
-    }
+
 
     public class AnotherInnerClass2 extends InnerClass {
         String name = "AnotherInnerClass";
