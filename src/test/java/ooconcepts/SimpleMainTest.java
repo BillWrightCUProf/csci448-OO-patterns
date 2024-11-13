@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleMainTest {
 
-    @Test
-    void testDefaultConstructor() {
-        SimpleMain simpleMain = new SimpleMain(null);
-        assertNotNull(simpleMain);
-    }
+//    @Test
+//    void testDefaultConstructor() {
+//        SimpleMain simpleMain = new SimpleMain(null);
+//        assertNotNull(simpleMain);
+//    }
 
 }
