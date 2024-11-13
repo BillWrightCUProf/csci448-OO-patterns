@@ -1,24 +1,25 @@
 package examples.composition;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 public class BikeRace {
     String name;
-    Date startDate;
+    LocalDate startDate;
     Double distanceInMiles;
 
     public BikeRace(String name) {
         this.name = name;
     }
 
-    public BikeRace(String name, Date date, Double distanceInMiles) {
+    public BikeRace(String name, LocalDate date, Double distanceInMiles) {
         this.name = name;
         this.startDate = date;
         this.distanceInMiles = distanceInMiles;
     }
 
-    public Date[] getDates() {
-        return new Date[]{startDate, startDate};
+    public LocalDate[] getDates() {
+        return new LocalDate[]{startDate, startDate};
     }
 
     public Double getDistanceInMiles() {

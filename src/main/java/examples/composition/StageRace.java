@@ -1,6 +1,6 @@
 package examples.composition;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class StageRace extends BikeRace {
@@ -13,10 +13,10 @@ public class StageRace extends BikeRace {
 
 
     @Override
-    public Date[] getDates() {
-        Date[] dates = new Date[2];
-        dates[0] = stages.get(0).getDates()[0];
-        dates[1] = stages.get(stages.size() - 1).getDates()[1];
+    public LocalDate[] getDates() {
+        LocalDate[] dates = new LocalDate[2];
+        dates[0] = stages.getFirst().getDates()[0];
+        dates[1] = stages.getLast().getDates()[1];
         return dates;
     }
     @Override
