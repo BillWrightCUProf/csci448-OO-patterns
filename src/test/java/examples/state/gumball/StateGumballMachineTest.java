@@ -1,8 +1,7 @@
 package examples.state.gumball;
 
+import examples.state.gumballV2.State;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class StateGumballMachineTest {
 
@@ -52,5 +51,33 @@ class StateGumballMachineTest {
         gumballMachine.turnCrank();
 
         System.out.println(gumballMachine);
+    }
+
+    @Test
+    void testOriginalGumballMachine() {
+        int numberOfGumballs = 15;
+        System.out.println("***** Testing GumBallMachine that uses State Pattern *****");
+        StateGumballMachine gumballMachine = new StateGumballMachine(numberOfGumballs);
+        System.out.println(gumballMachine);
+
+        while (gumballMachine.notSoldOut()) {
+            gumballMachine.insertQuarter();
+            gumballMachine.turnCrank();
+        }
+    }
+
+    @Test
+    void testNoInitialStateCreationGumballMachine() {
+        int numberOfGumballs = 15;
+        System.out.println("***** Testing GumBallMachine that uses State Pattern *****");
+        examples.state.gumballV2.StateGumballMachine gumballMachine = new examples.state.gumballV2.StateGumballMachine(numberOfGumballs);
+        System.out.println(gumballMachine);
+
+        while (gumballMachine.notSoldOut()) {
+            gumballMachine.insertQuarter();
+            gumballMachine.turnCrank();
+        }
+
+        System.out.println("Called the State constructor method: " + State.constructorCallingCount + " times");
     }
 }

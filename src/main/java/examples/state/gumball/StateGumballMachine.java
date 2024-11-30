@@ -1,7 +1,5 @@
 package examples.state.gumball;
 
-import java.util.Random;
-
 public class StateGumballMachine {
     State soldOutState;
     State noQuarterState;
@@ -9,7 +7,7 @@ public class StateGumballMachine {
     State soldState;
     State winnerState;
 
-    State currentState;
+    State currentState = soldOutState;
     int count = 0;
 
     public StateGumballMachine(int numberGumballs) {
@@ -95,5 +93,9 @@ public class StateGumballMachine {
         result.append("\n");
         result.append("Machine is " + currentState + "\n");
         return result.toString();
+    }
+
+    public boolean notSoldOut() {
+        return currentState != soldOutState;
     }
 }
