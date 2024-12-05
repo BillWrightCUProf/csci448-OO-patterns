@@ -18,6 +18,11 @@ tasks.named('test') {
 }
 
 dependencies {
+    // Strategy Interface Definition
+    implementation files('libs/PolymorphiaStrategyModule-0.10.2.jar')
+    implementation files('libs/PolymorphiaStrategyImplementation-0.10.2.jar')
+    implementation files('libs/PolymorphiaProfessorStrategy-0.1.0.jar')
+
     implementation 'com.google.inject:guice:5.0.1'
     implementation 'org.springframework:spring-context:5.3.15'
 
