@@ -18,6 +18,7 @@ public class ContainingClass {
     InnerClass createInnerClass() {
         return new InnerClass();
     }
+    StaticInnerClass createStaticInnerClass() { return new StaticInnerClass(); }
 
     class InnerClass {
         String name = "InnerClass";
@@ -68,11 +69,16 @@ public class ContainingClass {
     }
 
     public static class StaticInnerClass {
+        private ContainingClass containingClass = new ContainingClass();
+
         String name = "StaticInnerClass";
 
         public void printNames() {
             System.out.println(name);
 
+            containingClass.name = "Setting name from StaticInnerClass";
+
+            System.out.println(containingClass.name);
             // We cannot do this
             // System.out.println(ContainingClass.this.name);
         }

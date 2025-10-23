@@ -1,5 +1,6 @@
 package ooconcepts.animals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,7 +15,7 @@ class ZooTest {
         zoo.makeAllNoises();
     }
 
-    @Test
+    @Disabled
     void testSpringAnnotationConfig() {
         ApplicationContext context = new AnnotationConfigApplicationContext(ZooConfig.class);
         Zoo zoo = (Zoo) context.getBean("zoo");

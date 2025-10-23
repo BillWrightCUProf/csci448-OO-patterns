@@ -1,6 +1,7 @@
 package examples.composition;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class BikeRace {
@@ -18,11 +19,16 @@ public class BikeRace {
         this.distanceInMiles = distanceInMiles;
     }
 
-    public LocalDate[] getDates() {
-        return new LocalDate[]{startDate, startDate};
+    public List<LocalDate> getDates() {
+        return List.of(startDate, startDate);
     }
 
     public Double getDistanceInMiles() {
         return distanceInMiles;
+    }
+
+    @Override
+    public String toString() {
+        return name + " is " + getDistanceInMiles() + " miles long";
     }
 }

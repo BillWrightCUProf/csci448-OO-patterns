@@ -15,6 +15,9 @@ public abstract class Animal implements Comparable<Animal> {
 
     abstract void setDefaultWeight();
 
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {
@@ -43,8 +46,13 @@ public abstract class Animal implements Comparable<Animal> {
         roam();;
     }
 
+//    @Override
+//    public int compareTo(Animal other) {
+//        return Math.toIntExact(Math.round(this.weightInKilograms - other.weightInKilograms));
+//    }
+
     @Override
     public int compareTo(Animal other) {
-        return Math.toIntExact(Math.round(this.weightInKilograms - other.weightInKilograms));
+        return this.weightInKilograms.compareTo(other.weightInKilograms);
     }
 }

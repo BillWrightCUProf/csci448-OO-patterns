@@ -1,9 +1,7 @@
 package ooconcepts.sorting;
 
-import java.util.List;
-
 public class Animal implements Comparable<Animal> {
-    private String name;
+    private final String name;
 
     public Animal(String name) {
         this.name = name;

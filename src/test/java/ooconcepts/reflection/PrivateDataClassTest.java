@@ -1,5 +1,6 @@
 package ooconcepts.reflection;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sun.misc.Unsafe;
 
@@ -29,22 +30,29 @@ class PrivateDataClassTest {
 
         PRIVATE_TEST_VARIABLE.set(bill, 40);
         System.out.println("Manipulated with VarHandle: " + bill);
+    }
+
+    @Disabled
+    void testPreJava18() throws NoSuchFieldException, IllegalAccessException {
+        PrivateDataClass bill = new PrivateDataClass("Bill", 40 + 21);
+        System.out.println(bill);
 
         // TODO: Update the lecture on Encapsulation to include this
         // THIS CODE WAS DEPRECATED IN Java 9.0 and the above method is to be used.
-//        Field ageField = bill.getClass().getDeclaredField("age");
-//        ageField.setAccessible(true);
-//        ageField.set(bill, 40);
-//        System.out.println(bill);
-//
-//        Field f = Unsafe.class.getDeclaredField("theUnsafe");
-//        f.setAccessible(true);
-//        var unsafe = (Unsafe) f.get(null);
-//        Field nameField = bill.getClass().getDeclaredField("name");
-//
-//        unsafe.putObject(bill, unsafe.objectFieldOffset(nameField), "I'm a hacker");
-//        unsafe.putInt(bill, unsafe.objectFieldOffset(ageField), 22);
-//        System.out.println(bill);
+        Field ageField = bill.getClass().getDeclaredField("age");
+        ageField.setAccessible(true);
+        ageField.set(bill, 40);
+        System.out.println("Just using reflection: " + bill);
+
+        // This code is marked for removal since Java 18, but still works in Java 23
+        Field f = Unsafe.class.getDeclaredField("theUnsafe");
+        f.setAccessible(true);
+        var unsafe = (Unsafe) f.get(null);
+        Field nameField = bill.getClass().getDeclaredField("name");
+
+        unsafe.putObject(bill, unsafe.objectFieldOffset(nameField), "I'm a hacker");
+        unsafe.putInt(bill, unsafe.objectFieldOffset(ageField), 22);
+        System.out.println("Using the Unsafe class: " + bill);
     }
 
 }

@@ -1,12 +1,13 @@
 package ooconcepts.sorting;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testAnimalSorting() {
         List<Animal> animals = new ArrayList<>(Arrays.asList(
                 new Animal("Lion"),

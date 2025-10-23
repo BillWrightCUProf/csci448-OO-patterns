@@ -13,12 +13,13 @@ public class StageRace extends BikeRace {
 
 
     @Override
-    public LocalDate[] getDates() {
-        LocalDate[] dates = new LocalDate[2];
-        dates[0] = stages.getFirst().getDates()[0];
-        dates[1] = stages.getLast().getDates()[1];
-        return dates;
+    public List<LocalDate> getDates() {
+        return List.of(
+                stages.getFirst().getDates().getFirst(),
+                stages.getLast().getDates().getLast()
+        );
     }
+
     @Override
     public Double getDistanceInMiles() {
         return stages.stream().mapToDouble(BikeRace::getDistanceInMiles).sum();

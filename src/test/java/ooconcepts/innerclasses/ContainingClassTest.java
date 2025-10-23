@@ -18,6 +18,12 @@ class ContainingClassTest {
     }
 
     @Test
+    void testStaticInnerClass() {
+        ContainingClass.StaticInnerClass staticInnerClass = new ContainingClass.StaticInnerClass();
+        staticInnerClass.printNames();
+    }
+
+    @Test
     void testCreatingInnerClass() {
         ContainingClass.StaticInnerClass staticInnerClass = new ContainingClass.StaticInnerClass();
         staticInnerClass.printNames();

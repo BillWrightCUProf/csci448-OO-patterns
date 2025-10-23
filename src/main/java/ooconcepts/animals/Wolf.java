@@ -1,6 +1,6 @@
 package ooconcepts.animals;
 
-public class Wolf extends Animal {
+public class Wolf extends Canine {
 
     public Wolf() {
         super("Wolf", "meat", "forest");

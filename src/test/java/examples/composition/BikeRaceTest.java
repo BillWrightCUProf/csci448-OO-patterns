@@ -3,7 +3,6 @@ package examples.composition;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,5 +23,11 @@ class BikeRaceTest {
         for (BikeRace race : racesOnMyCalendar) {
             System.out.println(race.name + " is " + race.getDistanceInMiles() + " miles long");
         }
+    }
+
+    @Test
+    void testToString() {
+        BikeRace oneDayRace = new BikeRace("Paris-Roubaix", LocalDate.of(2024, 4, 11), 160.0);
+        System.out.println(oneDayRace.toString());
     }
 }

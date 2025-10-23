@@ -34,4 +34,8 @@ public abstract class Animal {
         makeNoise();
         roam();
     }
+
+    boolean isADog() {
+        return false;
+    }
 }

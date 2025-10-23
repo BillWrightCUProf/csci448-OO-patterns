@@ -1,8 +1,8 @@
 package ooconcepts.reflection;
 
 public class PrivateDataClass {
-    private String name;
-    private int age;
+    private final String name;
+    private final int age;
 
     public PrivateDataClass(String name, Integer age) {
         this.name = name;

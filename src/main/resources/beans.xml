@@ -7,14 +7,14 @@
 
     <bean id="hippo" class="ooconcepts.animals.Hippo"></bean>
     <bean id="ibis" class="ooconcepts.animals.Ibis"></bean>
-    <bean id="wold" class="ooconcepts.animals.Wolf"></bean>
+    <bean id="wolf" class="ooconcepts.animals.Wolf"></bean>
 
     <bean id="zoo" class="ooconcepts.animals.Zoo">
         <constructor-arg>
             <list>
                 <ref bean="hippo"/>
                 <ref bean="ibis"/>
-                <ref bean="wold"/>
+                <ref bean="wolf"/>
             </list>
         </constructor-arg>
     </bean>

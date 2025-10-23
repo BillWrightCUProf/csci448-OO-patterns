@@ -1,6 +1,14 @@
 package examples.strategy;
 
 public class Swimmer {
+    public enum Stroke {
+        BREAST,
+        BACK,
+        BUTTERFLY,
+        FREESTYLE,
+        SIDE,
+        DOG_PADDLE
+    }
     Stroke behavior;
 
     Swimmer(Stroke behavior) {
