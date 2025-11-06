@@ -1,6 +1,6 @@
 package examples.decorator;
 
-public class WhippedCream extends BeverageDecorator {
+public class WhippedCream extends DecoratedBeverage {
     public WhippedCream(Beverage beverage) {
         super(beverage);
         description = "Whipped Cream";

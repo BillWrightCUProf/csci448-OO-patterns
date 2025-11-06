@@ -3,7 +3,7 @@ package examples.decorator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Mocha extends BeverageDecorator {
+public class Mocha extends DecoratedBeverage {
 
     private static Map<Size, Double> ADDITIONAL_COSTS;
 
@@ -21,7 +21,7 @@ public class Mocha extends BeverageDecorator {
     }
 
     public Double getCost() {
-        Double totalCost = beverage.getCost() + cost;
+        double totalCost = beverage.getCost() + cost;
         if (getSize() == Size.VENTI) {
             totalCost += 0.20;
         }
@@ -32,7 +32,7 @@ public class Mocha extends BeverageDecorator {
     }
 
     public Double getCost2() {
-        Double totalCost = beverage.getCost() + cost;
+        double totalCost = beverage.getCost() + cost;
         switch (getSize()) {
             case GRANDE -> totalCost += 0.20;
             case VENTI -> totalCost += 0.10;
