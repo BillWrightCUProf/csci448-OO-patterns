@@ -2,14 +2,22 @@ package examples.decorator;
 
 public abstract class Beverage {
     public enum Size { TALL, GRANDE, VENTI }
-    Size size = Size.TALL;
-    String description = "Unknown Beverage";
-    Double cost;
 
-    public Beverage() {
+    Size size;
+    Double cost;
+    String description = "Unknown Beverage";
+
+    Beverage() {
     }
 
     public Beverage(Size size) {
+        setSize(size);
+    }
+
+    public Size getSize() {
+        return size;
+    }
+    protected void setSize(Size size) {
         this.size = size;
     }
 
@@ -19,5 +27,4 @@ public abstract class Beverage {
     public String getDescription() {
         return description;
     }
-
 }

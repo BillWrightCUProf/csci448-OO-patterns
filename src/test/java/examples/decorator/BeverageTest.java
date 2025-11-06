@@ -8,6 +8,8 @@ class BeverageTest {
 
     @Test
     void testEspresso() {
+//        Beverage beverageWithNoSize = new Espresso();
+
         Beverage espresso = new Espresso(Beverage.Size.VENTI);
         assertEquals("Espresso", espresso.getDescription());
         assertEquals(1.99, espresso.getCost());

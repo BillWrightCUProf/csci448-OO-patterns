@@ -6,7 +6,8 @@ group = 'com.billwright'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = JavaVersion.VERSION_24
+    targetCompatibility = JavaVersion.VERSION_24
 }
 
 repositories {
@@ -15,6 +16,14 @@ repositories {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["--enable-preview"]
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs += ["--enable-preview"]
 }
 
 dependencies {
