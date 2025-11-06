@@ -8,8 +8,8 @@ public class TwoWheeledRobot extends Agent {
     RobotMotor rightWheelMotor;
     Sensor bumperSensor;
 
-    TwoWheeledRobot(World world) {
-        super(world);
+    TwoWheeledRobot(int heading) {
+        super(heading);
         leftWheelMotor = new RobotMotor();
         rightWheelMotor = new RobotMotor();
         int orientationInDegrees = 0;   // pointing straight ahead
