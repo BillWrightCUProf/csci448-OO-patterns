@@ -4,16 +4,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-public class BikeRace {
+public class OneDayBikeRace implements IBikeRace {
     String name;
     LocalDate startDate;
     Double distanceInMiles;
 
-    public BikeRace(String name) {
+    public OneDayBikeRace(String name) {
         this.name = name;
     }
 
-    public BikeRace(String name, LocalDate date, Double distanceInMiles) {
+    public OneDayBikeRace(String name, LocalDate date, Double distanceInMiles) {
         this.name = name;
         this.startDate = date;
         this.distanceInMiles = distanceInMiles;

@@ -8,12 +8,16 @@ public class TwoWheeledRobot extends Agent {
     RobotMotor rightWheelMotor;
     Sensor bumperSensor;
 
-    TwoWheeledRobot(int heading) {
-        super(heading);
+    TwoWheeledRobot() {
         leftWheelMotor = new RobotMotor();
         rightWheelMotor = new RobotMotor();
         int orientationInDegrees = 0;   // pointing straight ahead
         bumperSensor = new BumperSensor(orientationInDegrees);
+    }
+
+    @Override
+    public Vector getVelocity() {
+        return null;
     }
 
     public void move(int numberOfTimeIntervals) {

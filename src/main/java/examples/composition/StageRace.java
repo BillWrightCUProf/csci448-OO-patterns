@@ -3,10 +3,10 @@ package examples.composition;
 import java.time.LocalDate;
 import java.util.List;
 
-public class StageRace extends BikeRace {
-    List<BikeRace> stages;
+public class StageRace extends BikeRaceSuperclass {
+    List<OneDayBikeRace> stages;
 
-    public StageRace(String name, List<BikeRace> stages) {
+    public StageRace(String name, List<OneDayBikeRace> stages) {
         super(name);
         this.stages = stages;
     }
@@ -22,6 +22,6 @@ public class StageRace extends BikeRace {
 
     @Override
     public Double getDistanceInMiles() {
-        return stages.stream().mapToDouble(BikeRace::getDistanceInMiles).sum();
+        return stages.stream().mapToDouble(OneDayBikeRace::getDistanceInMiles).sum();
     }
 }
