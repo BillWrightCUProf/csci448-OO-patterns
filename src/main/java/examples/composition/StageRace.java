@@ -12,12 +12,16 @@ public class StageRace extends BikeRaceSuperclass {
     }
 
 
-    @Override
-    public List<LocalDate> getDates() {
+    private List<LocalDate> getDates() {
         return List.of(
                 stages.getFirst().getDates().getFirst(),
                 stages.getLast().getDates().getLast()
         );
+    }
+
+    @Override
+    public String getDateString() {
+        return getDates().getFirst().toString() + " - " + getDates().getLast().toString();
     }
 
     @Override

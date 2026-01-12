@@ -23,6 +23,11 @@ public class OneDayBikeRace implements IBikeRace {
         return List.of(startDate, startDate);
     }
 
+    @Override
+    public String getDateString() {
+        return getDates().getFirst().toString() + " - " + getDates().getLast().toString();
+    }
+
     public Double getDistanceInMiles() {
         return distanceInMiles;
     }
