@@ -1,13 +1,22 @@
+package refactoring.dotsandboxes;
+
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class DotsAndBoxes {
     private JFrame frame;
     private GamePanel gamePanel;
+    private static final int DEFAULT_DISPLAY_SIZE = 500; // Grid size (4x4 dots)
     private static final int SIZE = 4; // Grid size (4x4 dots)
     private boolean[][] hLines = new boolean[SIZE][SIZE - 1];
     private boolean[][] vLines = new boolean[SIZE - 1][SIZE];
@@ -21,10 +30,10 @@ public class DotsAndBoxes {
         frame = new JFrame("Dots and Boxes");
         gamePanel = new GamePanel();
         frame.add(gamePanel);
-        frame.setSize(500, 500);
+        frame.setSize(DEFAULT_DISPLAY_SIZE, DEFAULT_DISPLAY_SIZE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (playerTurn && handleClick(e.getX(), e.getY())) {
@@ -101,7 +110,7 @@ public class DotsAndBoxes {
             return Math.hypot(px - x1, py - y1);
         }
         double t = ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy);
-        t = Math.max(0, Math.min(1, t));
+        t = max(0, min(1, t));
         double projX = x1 + t * dx;
         double projY = y1 + t * dy;
         return Math.hypot(px - projX, py - projY);
@@ -241,17 +250,30 @@ public class DotsAndBoxes {
     }
 
     private class GamePanel extends JPanel {
+        int minimumFontSize = 6;
+        int fontScalingFactor = 30;
+        int scoreHorizontalPosition = 25;
+        int scorePadding = 20;
+        int scorePanelHeight;
+        int scoreFontSize;
+        int scoreVerticalPosition;
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            int gridSize = frame.getWidth() / (SIZE + 1);
-            int margin = gridSize / 6;
+            scoreFontSize = max(minimumFontSize, frame.getHeight() / fontScalingFactor);
+            scorePanelHeight = scoreFontSize * 2 + scorePadding;
+            int gridSize = min(frame.getWidth(), frame.getHeight() - scorePanelHeight) / (SIZE + 1);
+            scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
 
             g.setColor(Color.BLACK);
             int dotSize = 12;
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
-                    g.fillOval((j + 1) * gridSize - dotSize / 2, (i + 1) * gridSize - dotSize / 2, dotSize, dotSize);
+                    int colXPosition = (j + 1) * gridSize - dotSize / 2;
+//                    int rowYPosition = (i + 1) * gridSize - dotSize / 2;
+                    int rowYPosition = (i + 1) * gridSize;
+                    g.fillOval(colXPosition, rowYPosition, dotSize, dotSize);
                 }
             }
 
@@ -283,11 +305,18 @@ public class DotsAndBoxes {
                     }
                 }
             }
+            paintScorePanel(g);
+        }
 
-            g.setFont(new Font("Arial", Font.BOLD, 16));
+        private void paintScorePanel(Graphics g) {
+            g.setFont(new Font("Arial", Font.BOLD, scoreFontSize));
             g.setColor(Color.BLACK);
-            g.drawString("Player: " + playerScore, 20, frame.getHeight() - 50);
-            g.drawString("Computer: " + aiScore, 150, frame.getHeight() - 50);
+            System.out.println("font size: " + scoreFontSize);
+            System.out.println("score vertical position: " + scoreVerticalPosition);
+            System.out.println("frame height: " + frame.getHeight());
+            String playerScoreString = "Player: " + playerScore;
+            g.drawString(playerScoreString, scoreHorizontalPosition, scoreVerticalPosition);
+            g.drawString("Computer: " + aiScore, scoreHorizontalPosition + (playerScoreString.length() * scoreFontSize + scorePadding), scoreVerticalPosition);
         }
     }
 
