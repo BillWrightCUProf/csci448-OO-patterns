@@ -16,7 +16,7 @@ class TwoWheeledRobotTest {
         Position initialPosition = world.getRandomPosition();
         int initialHeadingInDegrees = world.getRandomHeading();
 
-        TwoWheeledRobot robot = new TwoWheeledRobot(initialHeadingInDegrees);
+        TwoWheeledRobot robot = new TwoWheeledRobot();
         world.addAgent(robot, initialPosition);
         world.simulate(NUMBER_OF_TIME_STEPS);
     }

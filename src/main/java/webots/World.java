@@ -63,7 +63,7 @@ public class World implements IObservableWorld {
     private void broadcastChange() {
     }
 
-    public boolean agentAgainstObstacle(Agent agent, Position nextDesiredPosition) {
+    public boolean agentAgainstObstacle(Agent agent) {
         // --- Collision Detection ---
         Area robotArea = getCurrentAgentArea(agent);
         for (Obstacle obstacle : obstacles) {

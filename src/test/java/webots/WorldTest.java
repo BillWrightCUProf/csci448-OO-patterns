@@ -11,12 +11,12 @@ class WorldTest {
     void createSimpleWorldWithNoObstacles() {
         World world = new World(800, 800);
         Agent robot = new TwoWheeledRobot();
-        world.addAgent(robot, world.getRandomPosition(), world.getRandomHeading());
+        world.addAgent(robot, world.getRandomPosition());
 
         int numberOfTimeTicks = 100;
         world.simulate(numberOfTimeTicks);
 
-        assertTrue(world.agentAgainstObstacle(robot, nextDesiredPosition));
+        assertTrue(world.agentAgainstObstacle(robot));
     }
 
     @Test
@@ -26,6 +26,6 @@ class WorldTest {
         world.addObstacle(obstacleFactory.createPentagon(100));
         world.addObstacle(obstacleFactory.createEquilateralTriangle(100));
         Agent robot = new TwoWheeledRobot();
-        world.addAgent(robot, world.getRandomPosition(), world.getRandomHeading());
+        world.addAgent(robot, world.getRandomPosition());
     }
 }

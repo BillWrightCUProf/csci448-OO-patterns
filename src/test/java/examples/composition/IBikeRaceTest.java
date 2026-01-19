@@ -16,9 +16,9 @@ class IBikeRaceTest {
                 new OneDayBikeRace("Stage 3", LocalDate.of(2024, 7, 21), 140.0)
         ));
 
-        List<OneDayBikeRace> racesOnMyCalendar = List.of(oneDayRace, tourDeFrance);
+        List<BikeRaceSuperclass> racesOnMyCalendar = List.of(oneDayRace, tourDeFrance);
 
-        for (OneDayBikeRace race : racesOnMyCalendar) {
+        for (BikeRaceSuperclass race : racesOnMyCalendar) {
             System.out.println(race.name + " is " + race.getDistanceInMiles() + " miles long");
         }
     }
