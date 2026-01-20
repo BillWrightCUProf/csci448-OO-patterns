@@ -49,7 +49,9 @@ public class DotsAndBoxes {
     }
 
     private boolean handleClick(int x, int y) {
-        int gridSize = frame.getWidth() / (SIZE + 1);
+//        int gridSize = frame.getWidth() / (SIZE + 1);
+        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
+
         int margin = gridSize / 3; // Expanded margin for easier clicking
 
         double minDistance = Double.MAX_VALUE;
@@ -281,7 +283,7 @@ public class DotsAndBoxes {
                 for (int j = 0; j < SIZE - 1; j++) {
                     if (hLines[i][j]) {
                         g.setColor(hLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize - 2, gridSize, 4);
+                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, 4);
                     }
                 }
             }
@@ -311,9 +313,6 @@ public class DotsAndBoxes {
         private void paintScorePanel(Graphics g) {
             g.setFont(new Font("Arial", Font.BOLD, scoreFontSize));
             g.setColor(Color.BLACK);
-            System.out.println("font size: " + scoreFontSize);
-            System.out.println("score vertical position: " + scoreVerticalPosition);
-            System.out.println("frame height: " + frame.getHeight());
             String playerScoreString = "Player: " + playerScore;
             g.drawString(playerScoreString, scoreHorizontalPosition, scoreVerticalPosition);
             g.drawString("Computer: " + aiScore, scoreHorizontalPosition + (playerScoreString.length() * scoreFontSize + scorePadding), scoreVerticalPosition);
