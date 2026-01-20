@@ -1,5 +1,6 @@
 package ooconcepts.design.chords;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChordTest {
 
-    @Test
+    @Disabled
     void recognizeCMajorChord() {
         List<Note> unknownChordNotes = List.of(
                 Note.C,

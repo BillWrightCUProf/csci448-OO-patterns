@@ -1,4 +1,4 @@
-package examples.composition;
+package examples.observer;
 
 public interface QuackObservable {
     void registerObserver(QuackObserver observer);

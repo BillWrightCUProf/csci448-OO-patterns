@@ -2,6 +2,7 @@ package examples.composition;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.SequencedCollection;
 
 
 public class OneDayBikeRace implements IBikeRace {
@@ -19,13 +20,8 @@ public class OneDayBikeRace implements IBikeRace {
         this.distanceInMiles = distanceInMiles;
     }
 
-    public List<LocalDate> getDates() {
-        return List.of(startDate, startDate);
-    }
-
-    @Override
     public String getDateString() {
-        return getDates().getFirst().toString() + " - " + getDates().getLast().toString();
+        return startDate.toString();
     }
 
     public Double getDistanceInMiles() {
@@ -35,5 +31,9 @@ public class OneDayBikeRace implements IBikeRace {
     @Override
     public String toString() {
         return name + " is " + getDistanceInMiles() + " miles long";
+    }
+
+    public SequencedCollection<LocalDate> getDates() {
+        return List.of(startDate, startDate.plusDays(1));
     }
 }

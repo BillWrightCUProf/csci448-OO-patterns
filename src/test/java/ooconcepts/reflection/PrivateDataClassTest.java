@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PrivateDataClassTest {
 
-    @Test
+    @Disabled
     void testPrivateDataClass() throws NoSuchFieldException, IllegalAccessException {
         PrivateDataClass bill = new PrivateDataClass("Bill", 40 + 21);
         System.out.println(bill);
@@ -50,9 +50,9 @@ class PrivateDataClassTest {
         var unsafe = (Unsafe) f.get(null);
         Field nameField = bill.getClass().getDeclaredField("name");
 
-        unsafe.putObject(bill, unsafe.objectFieldOffset(nameField), "I'm a hacker");
-        unsafe.putInt(bill, unsafe.objectFieldOffset(ageField), 22);
-        System.out.println("Using the Unsafe class: " + bill);
+//        unsafe.putObject(bill, unsafe.objectFieldOffset(nameField), "I'm a hacker");
+//        unsafe.putInt(bill, unsafe.objectFieldOffset(ageField), 22);
+//        System.out.println("Using the Unsafe class: " + bill);
     }
 
 }

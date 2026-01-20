@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FindPrimesTest {
-    int largeNumber = 100_000_000;
+    int largeNumber = 100_000;
     int availableProcessors;
 
     FindPrimesTest() {

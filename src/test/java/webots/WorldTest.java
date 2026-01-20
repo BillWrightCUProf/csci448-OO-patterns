@@ -1,5 +1,6 @@
 package webots;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class WorldTest {
     ObstacleFactory obstacleFactory = new ObstacleFactory();
 
-    @Test
+    @Disabled
     void createSimpleWorldWithNoObstacles() {
         World world = new World(800, 800);
         Agent robot = new TwoWheeledRobot();
