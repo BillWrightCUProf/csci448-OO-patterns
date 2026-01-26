@@ -16,6 +16,9 @@ class PolygonTest {
         Triangle triangle = new Triangle(10, 20);
         assertEquals(200, rectangle.area());
         assertEquals(100, triangle.area());
+
+        System.out.println("Triangles have " + Triangle.NUMBER_OF_SIDES + " sides.");
+        System.out.println("Rectangles have " + Rectangle.NUMBER_OF_SIDES + " sides.");
     }
 
 }
