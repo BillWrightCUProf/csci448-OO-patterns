@@ -1,5 +1,8 @@
 package examples.composition;
 
+import examples.observer.QuackObserver;
+import examples.observer.Quackable;
+
 import java.util.ArrayList;
 import java.util.List;
 

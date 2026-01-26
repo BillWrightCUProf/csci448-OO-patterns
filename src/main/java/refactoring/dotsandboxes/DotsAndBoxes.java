@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static java.lang.Math.max;
@@ -34,9 +35,20 @@ public class DotsAndBoxes {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
-        frame.addMouseListener(new MouseAdapter() {
+        MouseAdapter mouseAdapter = createMouseHandler();
+        frame.addMouseListener(mouseAdapter);
+        frame.addMouseMotionListener(mouseAdapter);
+        frame.setVisible(true);
+    }
+
+    private MouseAdapter createMouseHandler() {
+        return new MouseAdapter() {
+            GridPosition hoveredLine = null;
+
+            @Override
             public void mousePressed(MouseEvent e) {
                 if (playerTurn && handleClick(e.getX(), e.getY())) {
+                    System.out.println(e.getX() + " " + e.getY());
                     gamePanel.repaint();
                     if (!checkForCompletion()) {
                         playerTurn = false;
@@ -44,8 +56,81 @@ public class DotsAndBoxes {
                     }
                 }
             }
-        });
-        frame.setVisible(true);
+        };
+
+    }
+
+    GridPosition mapMouseToGrid(Point p) {
+        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
+
+        int x = p.x;
+        int y = p.y;
+
+        int col = x / gridSize - 1;
+        int row = y / gridSize - 1;
+//        System.out.println("row: " + row + " col: " + col);
+
+        int dx = x % gridSize;
+        int dy = y % gridSize;
+//        System.out.println(dx + " " + dy);
+
+        int margin = 6;  // hover sensitivity in pixels
+
+        // Near horizontal line?
+        if (dy < margin && col < SIZE && row > 0) {
+            return new GridPosition(row, col, true);
+        }
+        if (gridSize - dy < margin && col < SIZE && row < SIZE) {
+            return new GridPosition(row + 1, col, true);
+        }
+
+        // Near vertical line?
+        if (dx < margin && row < SIZE && col > 0) {
+            return new GridPosition(row, col, false);
+        }
+        if (gridSize - dx < margin && row < SIZE && col < SIZE) {
+            return new GridPosition(row, col + 1, false);
+        }
+
+        return null;
+    }
+
+    private int[] nearAvailableLine(MouseEvent e) {
+        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
+        int margin = gridSize / 3; // Expanded margin for easier clicking
+
+        // Check horizontal lines
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE - 1; j++) {
+                if (!hLines[i][j]) {
+                    int x1 = (j + 1) * gridSize;
+                    int y1 = (i + 1) * gridSize;
+                    int x2 = (j + 2) * gridSize;
+                    int y2 = y1;
+                    double distance = pointToSegmentDistance(e.getX(), e.getY(), x1, y1, x2, y2);
+                    if (distance <= margin) {
+                        return new int[]{0, i, j};
+                    }
+                }
+            }
+        }
+
+        // Check vertical lines
+        for (int i = 0; i < SIZE - 1; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (!vLines[i][j]) {
+                    int x1 = (j + 1) * gridSize;
+                    int y1 = (i + 1) * gridSize;
+                    int x2 = x1;
+                    int y2 = (i + 2) * gridSize;
+                    double distance = pointToSegmentDistance(e.getX(), e.getY(), x1, y1, x2, y2);
+                    if (distance <= margin) {
+                        return new int[]{1, i, j};
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private boolean handleClick(int x, int y) {
@@ -252,42 +337,84 @@ public class DotsAndBoxes {
     }
 
     private class GamePanel extends JPanel {
-        int minimumFontSize = 6;
-        int fontScalingFactor = 30;
-        int scoreHorizontalPosition = 25;
-        int scorePadding = 20;
+        static final int MINIMUM_FONT_SIZE = 6;
+        static final int FONT_SCALING_FACTOR = 30;
+        static final int SCORE_HORIZONTAL_POSITION = 25;
+        static final int SCORE_PADDING = 20;
+        static final Color SCORE_FONT_COLOR = Color.BLACK;
+        static final Color PLAYER_LINE_COLOR = Color.GREEN;
+        static final Font ownersFont = new Font("Arial", Font.BOLD, 24);
         int scorePanelHeight;
         int scoreFontSize;
-        int scoreVerticalPosition;
+
+        private GridPosition hoveredLine;
+
+        GamePanel() {
+            MouseAdapter mouseHandler = new MouseAdapter() {
+
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    GridPosition newHover = mapMouseToGrid(e.getPoint());
+                    if (!Objects.equals(newHover, hoveredLine)) {
+                        hoveredLine = newHover;
+                        repaint();
+                    }
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    GridPosition pos = mapMouseToGrid(e.getPoint());
+                    if (pos != null) {
+                        repaint();
+                    }
+                }
+            };
+
+            addMouseListener(mouseHandler);
+            addMouseMotionListener(mouseHandler);
+        }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            scoreFontSize = max(minimumFontSize, frame.getHeight() / fontScalingFactor);
-            scorePanelHeight = scoreFontSize * 2 + scorePadding;
+            scoreFontSize = max(MINIMUM_FONT_SIZE, frame.getHeight() / FONT_SCALING_FACTOR);
+            scorePanelHeight = scoreFontSize * 2 + SCORE_PADDING;
             int gridSize = min(frame.getWidth(), frame.getHeight() - scorePanelHeight) / (SIZE + 1);
-            scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
 
-            g.setColor(Color.BLACK);
-            int dotSize = 12;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    int colXPosition = (j + 1) * gridSize - dotSize / 2;
-//                    int rowYPosition = (i + 1) * gridSize - dotSize / 2;
-                    int rowYPosition = (i + 1) * gridSize;
-                    g.fillOval(colXPosition, rowYPosition, dotSize, dotSize);
+            drawDots(g, gridSize);
+            drawVisibleHorizontalLines(g, gridSize);
+            drawVisibleVerticalLines(g, gridSize);
+            drawBoxOwnersCharacter(g, gridSize);
+            paintScorePanel(g);
+
+            optionallyDrawHoveredOverLine(g, gridSize);
+        }
+
+        private void optionallyDrawHoveredOverLine(Graphics g, int gridSize) {
+            if (hoveredLine != null) {
+                g.setColor(PLAYER_LINE_COLOR);
+                if (hoveredLine.horizontal()) {
+                    g.fillRect((hoveredLine.col() + 1) * gridSize, (hoveredLine.row() + 1) * gridSize + 2, gridSize, 4);
+                } else {
+                    g.fillRect((hoveredLine.col() + 1) * gridSize - 2, (hoveredLine.row() + 1) * gridSize, 4, gridSize);
                 }
             }
+        }
 
-            for (int i = 0; i < SIZE; i++) {
+        private void drawBoxOwnersCharacter(Graphics g, int gridSize) {
+            for (int i = 0; i < SIZE - 1; i++) {
                 for (int j = 0; j < SIZE - 1; j++) {
-                    if (hLines[i][j]) {
-                        g.setColor(hLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, 4);
+                    if (boxes[i][j] != '\0') {
+                        g.setFont(ownersFont);
+                        g.setColor(Color.BLACK);
+                        g.drawString(String.valueOf(boxes[i][j]),
+                                (j + 1) * gridSize + gridSize / 3, (i + 1) * gridSize + 2 * gridSize / 3);
                     }
                 }
             }
+        }
 
+        private void drawVisibleVerticalLines(Graphics g, int gridSize) {
             for (int i = 0; i < SIZE - 1; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (vLines[i][j]) {
@@ -296,26 +423,42 @@ public class DotsAndBoxes {
                     }
                 }
             }
+        }
 
-            for (int i = 0; i < SIZE - 1; i++) {
+        private void drawVisibleHorizontalLines(Graphics g, int gridSize) {
+            for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE - 1; j++) {
-                    if (boxes[i][j] != '\0') {
-                        g.setFont(new Font("Arial", Font.BOLD, 24));
-                        g.setColor(Color.BLACK);
-                        g.drawString(String.valueOf(boxes[i][j]),
-                                (j + 1) * gridSize + gridSize / 3, (i + 1) * gridSize + 2 * gridSize / 3);
+                    if (hLines[i][j]) {
+                        g.setColor(hLineColors[i][j]);
+                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, 4);
                     }
                 }
             }
-            paintScorePanel(g);
+        }
+
+        private void drawDots(Graphics g, int gridSize) {
+            g.setColor(Color.BLACK);
+            int dotSize = 12;
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    int colXPosition = (j + 1) * gridSize - dotSize / 2;
+                    int rowYPosition = (i + 1) * gridSize - dotSize / 2;
+                    g.fillOval(colXPosition, rowYPosition, dotSize, dotSize);
+                }
+            }
         }
 
         private void paintScorePanel(Graphics g) {
-            g.setFont(new Font("Arial", Font.BOLD, scoreFontSize));
-            g.setColor(Color.BLACK);
+            Font scoreFont = new Font("Arial", Font.BOLD, scoreFontSize);
+            g.setFont(scoreFont);
+            g.setColor(SCORE_FONT_COLOR);
             String playerScoreString = "Player: " + playerScore;
-            g.drawString(playerScoreString, scoreHorizontalPosition, scoreVerticalPosition);
-            g.drawString("Computer: " + aiScore, scoreHorizontalPosition + (playerScoreString.length() * scoreFontSize + scorePadding), scoreVerticalPosition);
+            int scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
+            g.drawString(playerScoreString, SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
+            g.drawString("Computer: " + aiScore, SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING), scoreVerticalPosition);
+            if (hoveredLine != null) {
+                g.drawString("orientation: " + hoveredLine.horizontal() + "; row:" + hoveredLine.row() + "; col:" + hoveredLine.col(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
+            }
         }
     }
 

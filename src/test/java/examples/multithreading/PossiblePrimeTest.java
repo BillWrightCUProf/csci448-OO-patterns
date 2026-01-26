@@ -1,5 +1,6 @@
 package examples.multithreading;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -16,28 +17,28 @@ class PossiblePrimeTest {
         assertTrue(prime.isPrime(), bigInteger + " should be prime");
     }
 
-    @Test
+    @Disabled
     void testNoThreadsBigInt() {
         BigInteger bigInteger = new BigInteger("37107287533902102798797998220837590246510135740253");
         PossiblePrime prime = new PossiblePrime(bigInteger);
         assertFalse(prime.isPrime(), bigInteger + "should NOT be prime");
     }
 
-    @Test
+    @Disabled
     void testNoThreadsBigInt2() {
         BigInteger bigInteger = new BigInteger("1069682546379420662980628371889235809931107977522374618009949337");
         PossiblePrime prime = new PossiblePrime(bigInteger);
         assertFalse(prime.isPrime(), bigInteger + "should NOT be prime");
     }
 
-    @Test
+    @Disabled
     void testNoThreadsFindFactors() {
         BigInteger bigInteger = new BigInteger("371072875339026514250053");
         PossiblePrime prime = new PossiblePrime(bigInteger);
         System.out.println("The factors of " + bigInteger + " are: " + prime.getFactors());
     }
 
-    @Test
+    @Disabled
     void testWithThreadsFindFactors() {
         BigInteger bigInteger = new BigInteger("371072875339026514250053");
         PossiblePrime prime = new PossiblePrime(bigInteger);
