@@ -18,7 +18,7 @@ public class DotsAndBoxes {
     private JFrame frame;
     private GamePanel gamePanel;
     private static final int DEFAULT_DISPLAY_SIZE = 500; // Grid size (4x4 dots)
-    private static final int SIZE = 4; // Grid size (4x4 dots)
+    private static int SIZE = 3; // Grid size (4x4 dots)
     private boolean[][] hLines = new boolean[SIZE][SIZE - 1];
     private boolean[][] vLines = new boolean[SIZE - 1][SIZE];
     private char[][] boxes = new char[SIZE - 1][SIZE - 1];
@@ -26,10 +26,12 @@ public class DotsAndBoxes {
     private Color[][] vLineColors = new Color[SIZE - 1][SIZE];
     private int playerScore = 0, aiScore = 0;
     private boolean playerTurn = true;
+    private DotsAndBoxesModel dotsAndBoxesModel = new DotsAndBoxesModel(SIZE - 1, SIZE - 1);
 
-    public DotsAndBoxes() {
+    public DotsAndBoxes(int numRows, int numCols) {
+        SIZE = numRows;
         frame = new JFrame("Dots and Boxes");
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(dotsAndBoxesModel);
         frame.add(gamePanel);
         frame.setSize(DEFAULT_DISPLAY_SIZE, DEFAULT_DISPLAY_SIZE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,41 +60,6 @@ public class DotsAndBoxes {
             }
         };
 
-    }
-
-    GridPosition mapMouseToGrid(Point p) {
-        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
-
-        int x = p.x;
-        int y = p.y;
-
-        int col = x / gridSize - 1;
-        int row = y / gridSize - 1;
-//        System.out.println("row: " + row + " col: " + col);
-
-        int dx = x % gridSize;
-        int dy = y % gridSize;
-//        System.out.println(dx + " " + dy);
-
-        int margin = 6;  // hover sensitivity in pixels
-
-        // Near horizontal line?
-        if (dy < margin && col < SIZE && row > 0) {
-            return new GridPosition(row, col, true);
-        }
-        if (gridSize - dy < margin && col < SIZE && row < SIZE) {
-            return new GridPosition(row + 1, col, true);
-        }
-
-        // Near vertical line?
-        if (dx < margin && row < SIZE && col > 0) {
-            return new GridPosition(row, col, false);
-        }
-        if (gridSize - dx < margin && row < SIZE && col < SIZE) {
-            return new GridPosition(row, col + 1, false);
-        }
-
-        return null;
     }
 
     private int[] nearAvailableLine(MouseEvent e) {
@@ -348,10 +315,11 @@ public class DotsAndBoxes {
         int scoreFontSize;
 
         private GridPosition hoveredLine;
+        private DotsAndBoxesModel model;
 
-        GamePanel() {
+        GamePanel(DotsAndBoxesModel model) {
+            this.model = model;
             MouseAdapter mouseHandler = new MouseAdapter() {
-
                 @Override
                 public void mouseMoved(MouseEvent e) {
                     GridPosition newHover = mapMouseToGrid(e.getPoint());
@@ -372,6 +340,43 @@ public class DotsAndBoxes {
 
             addMouseListener(mouseHandler);
             addMouseMotionListener(mouseHandler);
+        }
+
+        GridPosition mapMouseToGrid(Point p) {
+            int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
+
+            int x = p.x - gridSize;
+            int y = p.y - gridSize;
+            if (x < 0 || y < 0) {
+                return null;
+            }
+            if (x > gridSize * dotsAndBoxesModel.numCols ||
+                    y > gridSize * dotsAndBoxesModel.numRows) {
+                return null;
+            }
+
+            int col = min(x / gridSize, dotsAndBoxesModel.numCols);
+            int row = min(y / gridSize, dotsAndBoxesModel.numRows);
+
+            int margin = 20;  // hover sensitivity in pixels
+            int yOffset = y % gridSize;
+            int distanceToNearestHorizontalLine = Math.min(yOffset, gridSize - yOffset);
+            if (distanceToNearestHorizontalLine < margin) {
+                if (gridSize - yOffset < yOffset) {
+                    row++;
+                }
+                return new GridPosition(row, col, true);
+            }
+
+            int xOffset = x % gridSize;
+            int distanceToNearestVerticalLine = Math.min(xOffset, gridSize - xOffset);
+            if (distanceToNearestVerticalLine < margin) {
+                if (gridSize - xOffset < xOffset) {
+                    col++;
+                }
+                return new GridPosition(row, col, false);
+            }
+            return null;
         }
 
         @Override
@@ -457,12 +462,12 @@ public class DotsAndBoxes {
             g.drawString(playerScoreString, SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
             g.drawString("Computer: " + aiScore, SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING), scoreVerticalPosition);
             if (hoveredLine != null) {
-                g.drawString("orientation: " + hoveredLine.horizontal() + "; row:" + hoveredLine.row() + "; col:" + hoveredLine.col(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
+                g.drawString("horizontal?: " + hoveredLine.horizontal() + "; row:" + hoveredLine.row() + "; col:" + hoveredLine.col(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
             }
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(DotsAndBoxes::new);
+        SwingUtilities.invokeLater(() -> new DotsAndBoxes(SIZE, SIZE));
     }
 }
