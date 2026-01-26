@@ -322,9 +322,12 @@ public class DotsAndBoxes {
             MouseAdapter mouseHandler = new MouseAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
-                    GridPosition newHover = mapMouseToGrid(e.getPoint());
-                    if (!Objects.equals(newHover, hoveredLine)) {
-                        hoveredLine = newHover;
+                    GridPosition gridPosition = mapMouseToGrid(e.getPoint());
+                    if (gridPosition != null) {
+                        Side newHoverSide = dotsAndBoxesModel.mapToSide(gridPosition);
+                    }
+                    if (!Objects.equals(gridPosition, hoveredLine)) {
+                        hoveredLine = gridPosition;
                         repaint();
                     }
                 }
