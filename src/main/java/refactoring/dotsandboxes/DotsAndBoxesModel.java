@@ -27,10 +27,10 @@ public class DotsAndBoxesModel {
             }
         }
         for (int row = 0; row < numRows; row++) {
-            boxes[row][numCols - 1].right = new Side(row, numCols - 1, Orientation.HORIZONTAL);
+            boxes[row][numCols - 1].right = new Side(row, numCols, Orientation.VERTICAL);
         }
         for (int col = 0; col < numCols; col++) {
-            boxes[numRows - 1][col].bottom = new Side(numRows - 1, col, Orientation.VERTICAL);
+            boxes[numRows - 1][col].bottom = new Side(numRows, col, Orientation.HORIZONTAL);
         }
     }
 

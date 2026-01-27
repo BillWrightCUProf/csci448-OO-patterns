@@ -17,8 +17,8 @@ import static java.lang.Math.min;
 public class DotsAndBoxes {
     private JFrame frame;
     private GamePanel gamePanel;
-    private static final int DEFAULT_DISPLAY_SIZE = 500; // Grid size (4x4 dots)
-    private static int SIZE = 3; // Grid size (4x4 dots)
+    private static final int DEFAULT_DISPLAY_SIZE = 500;
+    private static int SIZE = 3;
     private boolean[][] hLines = new boolean[SIZE][SIZE - 1];
     private boolean[][] vLines = new boolean[SIZE - 1][SIZE];
     private char[][] boxes = new char[SIZE - 1][SIZE - 1];
@@ -29,7 +29,6 @@ public class DotsAndBoxes {
     private DotsAndBoxesModel dotsAndBoxesModel = new DotsAndBoxesModel(SIZE - 1, SIZE - 1);
 
     public DotsAndBoxes(int numRows, int numCols) {
-        SIZE = numRows;
         frame = new JFrame("Dots and Boxes");
         gamePanel = new GamePanel(dotsAndBoxesModel);
         frame.add(gamePanel);
@@ -305,6 +304,7 @@ public class DotsAndBoxes {
 
     private class GamePanel extends JPanel {
         static final int MINIMUM_FONT_SIZE = 6;
+        static final int LINE_WIDTH = 4;
         static final int FONT_SCALING_FACTOR = 30;
         static final int SCORE_HORIZONTAL_POSITION = 25;
         static final int SCORE_PADDING = 20;
@@ -316,6 +316,7 @@ public class DotsAndBoxes {
 
         private GridPosition hoveredLine;
         private DotsAndBoxesModel model;
+        private Side hoveredSide;
 
         GamePanel(DotsAndBoxesModel model) {
             this.model = model;
@@ -324,7 +325,11 @@ public class DotsAndBoxes {
                 public void mouseMoved(MouseEvent e) {
                     GridPosition gridPosition = mapMouseToGrid(e.getPoint());
                     if (gridPosition != null) {
-                        Side newHoverSide = dotsAndBoxesModel.mapToSide(gridPosition);
+                        Side newHoveredSide = dotsAndBoxesModel.mapToSide(gridPosition);
+                        if (newHoveredSide != hoveredSide) {
+                            hoveredSide = newHoveredSide;
+                            repaint();
+                        }
                     }
                     if (!Objects.equals(gridPosition, hoveredLine)) {
                         hoveredLine = gridPosition;
@@ -395,16 +400,28 @@ public class DotsAndBoxes {
             drawBoxOwnersCharacter(g, gridSize);
             paintScorePanel(g);
 
-            optionallyDrawHoveredOverLine(g, gridSize);
+//            optionallyDrawHoveredOverLine(g, gridSize);
+            optionallyDrawHoveredOverSide(g, gridSize);
+        }
+
+        private void optionallyDrawHoveredOverSide(Graphics g, int gridSize) {
+            if (hoveredSide != null) {
+                g.setColor(PLAYER_LINE_COLOR);
+                if (hoveredSide.isHorizontal()) {
+                    g.fillRect((hoveredSide.getCol() + 1) * gridSize, (hoveredSide.getRow() + 1) * gridSize + 2, gridSize, LINE_WIDTH);
+                } else {
+                    g.fillRect((hoveredSide.getCol() + 1) * gridSize - 2, (hoveredSide.getRow() + 1) * gridSize, LINE_WIDTH, gridSize);
+                }
+            }
         }
 
         private void optionallyDrawHoveredOverLine(Graphics g, int gridSize) {
             if (hoveredLine != null) {
                 g.setColor(PLAYER_LINE_COLOR);
                 if (hoveredLine.horizontal()) {
-                    g.fillRect((hoveredLine.col() + 1) * gridSize, (hoveredLine.row() + 1) * gridSize + 2, gridSize, 4);
+                    g.fillRect((hoveredLine.col() + 1) * gridSize, (hoveredLine.row() + 1) * gridSize + 2, gridSize, LINE_WIDTH);
                 } else {
-                    g.fillRect((hoveredLine.col() + 1) * gridSize - 2, (hoveredLine.row() + 1) * gridSize, 4, gridSize);
+                    g.fillRect((hoveredLine.col() + 1) * gridSize - 2, (hoveredLine.row() + 1) * gridSize, LINE_WIDTH, gridSize);
                 }
             }
         }
@@ -427,7 +444,7 @@ public class DotsAndBoxes {
                 for (int j = 0; j < SIZE; j++) {
                     if (vLines[i][j]) {
                         g.setColor(vLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize - 2, (i + 1) * gridSize, 4, gridSize);
+                        g.fillRect((j + 1) * gridSize - 2, (i + 1) * gridSize, LINE_WIDTH, gridSize);
                     }
                 }
             }
@@ -438,7 +455,7 @@ public class DotsAndBoxes {
                 for (int j = 0; j < SIZE - 1; j++) {
                     if (hLines[i][j]) {
                         g.setColor(hLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, 4);
+                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, LINE_WIDTH);
                     }
                 }
             }
@@ -471,6 +488,6 @@ public class DotsAndBoxes {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new DotsAndBoxes(SIZE, SIZE));
+        SwingUtilities.invokeLater(() -> new DotsAndBoxes(3, 3));
     }
 }
