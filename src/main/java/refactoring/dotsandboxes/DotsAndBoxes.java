@@ -8,7 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import static java.lang.Math.max;
@@ -59,44 +58,6 @@ public class DotsAndBoxes {
             }
         };
 
-    }
-
-    private int[] nearAvailableLine(MouseEvent e) {
-        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
-        int margin = gridSize / 3; // Expanded margin for easier clicking
-
-        // Check horizontal lines
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (!hLines[i][j]) {
-                    int x1 = (j + 1) * gridSize;
-                    int y1 = (i + 1) * gridSize;
-                    int x2 = (j + 2) * gridSize;
-                    int y2 = y1;
-                    double distance = pointToSegmentDistance(e.getX(), e.getY(), x1, y1, x2, y2);
-                    if (distance <= margin) {
-                        return new int[]{0, i, j};
-                    }
-                }
-            }
-        }
-
-        // Check vertical lines
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (!vLines[i][j]) {
-                    int x1 = (j + 1) * gridSize;
-                    int y1 = (i + 1) * gridSize;
-                    int x2 = x1;
-                    int y2 = (i + 2) * gridSize;
-                    double distance = pointToSegmentDistance(e.getX(), e.getY(), x1, y1, x2, y2);
-                    if (distance <= margin) {
-                        return new int[]{1, i, j};
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     private boolean handleClick(int x, int y) {
@@ -310,11 +271,11 @@ public class DotsAndBoxes {
         static final int SCORE_PADDING = 20;
         static final Color SCORE_FONT_COLOR = Color.BLACK;
         static final Color PLAYER_LINE_COLOR = Color.GREEN;
-        static final Font ownersFont = new Font("Arial", Font.BOLD, 24);
+        static final Color COMPUTER_LINE_COLOR = Color.MAGENTA;
+        static final Font BOX_OWNERS_FONT = new Font("Arial", Font.BOLD, 24);
         int scorePanelHeight;
         int scoreFontSize;
 
-        private GridPosition hoveredLine;
         private DotsAndBoxesModel model;
         private Side hoveredSide;
 
@@ -323,31 +284,41 @@ public class DotsAndBoxes {
             MouseAdapter mouseHandler = new MouseAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
-                    GridPosition gridPosition = mapMouseToGrid(e.getPoint());
-                    if (gridPosition != null) {
-                        Side newHoveredSide = dotsAndBoxesModel.mapToSide(gridPosition);
-                        if (newHoveredSide != hoveredSide) {
-                            hoveredSide = newHoveredSide;
-                            repaint();
-                        }
+                    if (!dotsAndBoxesModel.humanTurn) {
+                        return;
                     }
-                    if (!Objects.equals(gridPosition, hoveredLine)) {
-                        hoveredLine = gridPosition;
+                    Side newHoveredSide = mapMouseToBoxSide(e.getPoint());
+                    if (newHoveredSide != hoveredSide && (newHoveredSide == null || newHoveredSide.unowned())) {
+                        hoveredSide = newHoveredSide;
                         repaint();
                     }
                 }
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    GridPosition pos = mapMouseToGrid(e.getPoint());
-                    if (pos != null) {
-                        repaint();
+                    if (hoveredSide != null) {
+                        System.out.println("Clicked on side: " + hoveredSide);
+                        if (dotsAndBoxesModel.humanTurn) {
+                            hoveredSide.setOwner(Player.HUMAN);
+                            if (!dotsAndBoxesModel.wasBoxCompletedByLastMove(hoveredSide)) {
+                                dotsAndBoxesModel.humanTurn = false;
+                                SwingUtilities.invokeLater(() -> aiMove());
+                            }
+                        }
                     }
                 }
             };
 
             addMouseListener(mouseHandler);
             addMouseMotionListener(mouseHandler);
+        }
+
+        Side mapMouseToBoxSide(Point p) {
+            GridPosition gridPosition = mapMouseToGrid(p);
+            if (gridPosition != null) {
+                return dotsAndBoxesModel.mapToSide(gridPosition);
+            }
+            return null;
         }
 
         GridPosition mapMouseToGrid(Point p) {
@@ -395,49 +366,57 @@ public class DotsAndBoxes {
             int gridSize = min(frame.getWidth(), frame.getHeight() - scorePanelHeight) / (SIZE + 1);
 
             drawDots(g, gridSize);
-            drawVisibleHorizontalLines(g, gridSize);
-            drawVisibleVerticalLines(g, gridSize);
-            drawBoxOwnersCharacter(g, gridSize);
+            drawBoxes(g, gridSize);
+//            drawVisibleHorizontalLines(g, gridSize);
+//            drawVisibleVerticalLines(g, gridSize);
+//            drawBoxOwnersCharacter(g, gridSize);
             paintScorePanel(g);
 
-//            optionallyDrawHoveredOverLine(g, gridSize);
-            optionallyDrawHoveredOverSide(g, gridSize);
-        }
-
-        private void optionallyDrawHoveredOverSide(Graphics g, int gridSize) {
             if (hoveredSide != null) {
-                g.setColor(PLAYER_LINE_COLOR);
-                if (hoveredSide.isHorizontal()) {
-                    g.fillRect((hoveredSide.getCol() + 1) * gridSize, (hoveredSide.getRow() + 1) * gridSize + 2, gridSize, LINE_WIDTH);
-                } else {
-                    g.fillRect((hoveredSide.getCol() + 1) * gridSize - 2, (hoveredSide.getRow() + 1) * gridSize, LINE_WIDTH, gridSize);
+                drawSide(g, gridSize, hoveredSide);
+            }
+        }
+
+        private void drawBoxes(Graphics g, int gridSize) {
+            for (Box box : model.getBoxes()) {
+                List<Side> ownedSides = box.getOwnedSides();
+                for (Side side : ownedSides) {
+                    drawSide(g, gridSize, side);
+                }
+                if (box.isOwned()) {
+                    drawBoxOwnersCharacter(g, gridSize, box);
                 }
             }
         }
 
-        private void optionallyDrawHoveredOverLine(Graphics g, int gridSize) {
-            if (hoveredLine != null) {
-                g.setColor(PLAYER_LINE_COLOR);
-                if (hoveredLine.horizontal()) {
-                    g.fillRect((hoveredLine.col() + 1) * gridSize, (hoveredLine.row() + 1) * gridSize + 2, gridSize, LINE_WIDTH);
-                } else {
-                    g.fillRect((hoveredLine.col() + 1) * gridSize - 2, (hoveredLine.row() + 1) * gridSize, LINE_WIDTH, gridSize);
-                }
+        private void drawSide(Graphics g, int gridSize, Side side) {
+            g.setColor(side.isComputerOwned() ? COMPUTER_LINE_COLOR : PLAYER_LINE_COLOR);
+            if (side.isHorizontal()) {
+                g.fillRect((side.getCol() + 1) * gridSize, (side.getRow() + 1) * gridSize + 2, gridSize, LINE_WIDTH);
+            } else {
+                g.fillRect((side.getCol() + 1) * gridSize - 2, (side.getRow() + 1) * gridSize, LINE_WIDTH, gridSize);
             }
         }
 
-        private void drawBoxOwnersCharacter(Graphics g, int gridSize) {
-            for (int i = 0; i < SIZE - 1; i++) {
-                for (int j = 0; j < SIZE - 1; j++) {
-                    if (boxes[i][j] != '\0') {
-                        g.setFont(ownersFont);
-                        g.setColor(Color.BLACK);
-                        g.drawString(String.valueOf(boxes[i][j]),
-                                (j + 1) * gridSize + gridSize / 3, (i + 1) * gridSize + 2 * gridSize / 3);
-                    }
-                }
-            }
+        private void drawBoxOwnersCharacter(Graphics g, int gridSize, Box box) {
+            g.setFont(BOX_OWNERS_FONT);
+            g.setColor(Color.BLACK);
+            g.drawString(box.getOwner().toString(),
+                    (box.getCol() + 1) * gridSize + gridSize / 3, (box.getRow() + 1) * gridSize + 2 * gridSize / 3);
         }
+
+//        private void drawBoxOwnersCharacter(Graphics g, int gridSize) {
+//            for (int i = 0; i < SIZE - 1; i++) {
+//                for (int j = 0; j < SIZE - 1; j++) {
+//                    if (boxes[i][j] != '\0') {
+//                        g.setFont(BOX_OWNERS_FONT);
+//                        g.setColor(Color.BLACK);
+//                        g.drawString(String.valueOf(boxes[i][j]),
+//                                (j + 1) * gridSize + gridSize / 3, (i + 1) * gridSize + 2 * gridSize / 3);
+//                    }
+//                }
+//            }
+//        }
 
         private void drawVisibleVerticalLines(Graphics g, int gridSize) {
             for (int i = 0; i < SIZE - 1; i++) {
@@ -481,9 +460,7 @@ public class DotsAndBoxes {
             int scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
             g.drawString(playerScoreString, SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
             g.drawString("Computer: " + aiScore, SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING), scoreVerticalPosition);
-            if (hoveredLine != null) {
-                g.drawString("horizontal?: " + hoveredLine.horizontal() + "; row:" + hoveredLine.row() + "; col:" + hoveredLine.col(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
-            }
+            g.drawString("Player's Turn: " + (dotsAndBoxesModel.humanTurn ? "Human" : "Computer"), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
         }
     }
 

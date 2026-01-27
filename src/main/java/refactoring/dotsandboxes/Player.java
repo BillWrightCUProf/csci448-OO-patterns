@@ -1,13 +1,13 @@
 package refactoring.dotsandboxes;
 
 public enum Player {
-    NONE, PLAYER, COMPUTER;
+    NONE, HUMAN, COMPUTER;
 
     @Override
     public String toString() {
         return switch (this) {
             case NONE -> " ";
-            case PLAYER -> "P";
+            case HUMAN -> "H";
             case COMPUTER -> "C";
         };
     }

@@ -1,13 +1,14 @@
 package refactoring.dotsandboxes;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
-import static java.lang.Math.min;
 
 public class DotsAndBoxesModel {
     private Box[][] boxes;
     int numRows;
     int numCols;
+    boolean humanTurn = true; // true for Human, false for Computer
 
     public DotsAndBoxesModel(int numRows, int numCols) {
         this.numRows = numRows;
@@ -92,5 +93,26 @@ public class DotsAndBoxesModel {
         }
         System.out.println("  vertical -> left");
         return box.left;
+    }
+
+    public Box[] getBoxes() {
+        return Arrays.stream(boxes).flatMap(Arrays::stream).toArray(Box[]::new);
+    }
+
+    public boolean wasBoxCompletedByLastMove(Side side) {
+        for (Box box : boxesWithSide(side)) {
+            if (box.isComplete() && box.getOwner() == Player.NONE) {
+                box.setOwner(side.getOwner());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Box[] boxesWithSide(Side side) {
+        return Arrays.stream(boxes)
+                .flatMap(Arrays::stream)
+                .filter(box -> box.left == side || box.right == side || box.top == side || box.bottom == side)
+                .toArray(Box[]::new);
     }
 }

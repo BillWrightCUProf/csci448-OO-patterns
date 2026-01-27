@@ -24,8 +24,31 @@ public class Side {
         return orientation == Orientation.HORIZONTAL;
     }
 
-    public void setOwner(Player player) {}
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
+
     public boolean unowned() {
         return owner == Player.NONE;
     }
+
+    @Override
+    public String toString() {
+        String representation = "Side(" + row + ", " + col + ", " + orientation + ") owned by ";
+        representation += switch (owner) {
+            case NONE -> " ";
+            case HUMAN -> "P";
+            case COMPUTER -> "C";
+        };
+        return representation;
+    }
+
+    public boolean isComputerOwned() {
+        return owner == Player.COMPUTER;
+    }
+
 }
