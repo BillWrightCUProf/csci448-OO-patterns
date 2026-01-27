@@ -16,8 +16,8 @@ public class DotsAndBoxesModel {
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 boxes[row][col] = new Box();
-                boxes[row][col].top = new Side();
-                boxes[row][col].left = new Side();
+                boxes[row][col].top = new Side(row, col, Orientation.HORIZONTAL);
+                boxes[row][col].left = new Side(row, col, Orientation.VERTICAL);
                 if (col > 0) {
                     boxes[row][col - 1].right = boxes[row][col].left;
                 }
@@ -27,10 +27,10 @@ public class DotsAndBoxesModel {
             }
         }
         for (int row = 0; row < numRows; row++) {
-            boxes[row][numCols - 1].right = new Side();
+            boxes[row][numCols - 1].right = new Side(row, numCols - 1, Orientation.HORIZONTAL);
         }
         for (int col = 0; col < numCols; col++) {
-            boxes[numRows - 1][col].bottom = new Side();
+            boxes[numRows - 1][col].bottom = new Side(numRows - 1, col, Orientation.VERTICAL);
         }
     }
 

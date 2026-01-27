@@ -1,8 +1,30 @@
 package refactoring.dotsandboxes;
 
 public class Side {
-    Player owner = Player.NONE;
+    private Player owner = Player.NONE;
+    private int row, col;
+    private Orientation orientation;
 
+    public Side(int row, int col, Orientation orientation) {
+        this.row = row;
+        this.col = col;
+        this.orientation = orientation;
+    }
+    public int getRow() {
+        return row;
+    }
+    public int getCol() {
+        return col;
+    }
+    public boolean isVertical() {
+        return orientation == Orientation.VERTICAL;
+    }
+
+    public boolean isHorizontal() {
+        return orientation == Orientation.HORIZONTAL;
+    }
+
+    public void setOwner(Player player) {}
     public boolean unowned() {
         return owner == Player.NONE;
     }
