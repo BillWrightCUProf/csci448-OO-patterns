@@ -16,12 +16,6 @@ public class DotsAndBoxes {
     private GamePanel gamePanel;
     private static final int DEFAULT_DISPLAY_SIZE = 500;
     private static int SIZE = 3;
-    private boolean[][] hLines = new boolean[SIZE][SIZE - 1];
-    private boolean[][] vLines = new boolean[SIZE - 1][SIZE];
-    private char[][] boxes = new char[SIZE - 1][SIZE - 1];
-    private Color[][] hLineColors = new Color[SIZE][SIZE - 1];
-    private Color[][] vLineColors = new Color[SIZE - 1][SIZE];
-    private boolean playerTurn = true;
     private DotsAndBoxesModel model = new DotsAndBoxesModel(SIZE - 1, SIZE - 1);
     private AIPlayer aiPlayer = new AIPlayer(model);
 
@@ -196,41 +190,6 @@ public class DotsAndBoxes {
                     (box.getCol() + 1) * gridSize + gridSize / 3, (box.getRow() + 1) * gridSize + 2 * gridSize / 3);
         }
 
-//        private void drawBoxOwnersCharacter(Graphics g, int gridSize) {
-//            for (int i = 0; i < SIZE - 1; i++) {
-//                for (int j = 0; j < SIZE - 1; j++) {
-//                    if (boxes[i][j] != '\0') {
-//                        g.setFont(BOX_OWNERS_FONT);
-//                        g.setColor(Color.BLACK);
-//                        g.drawString(String.valueOf(boxes[i][j]),
-//                                (j + 1) * gridSize + gridSize / 3, (i + 1) * gridSize + 2 * gridSize / 3);
-//                    }
-//                }
-//            }
-//        }
-
-        private void drawVisibleVerticalLines(Graphics g, int gridSize) {
-            for (int i = 0; i < SIZE - 1; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    if (vLines[i][j]) {
-                        g.setColor(vLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize - 2, (i + 1) * gridSize, LINE_WIDTH, gridSize);
-                    }
-                }
-            }
-        }
-
-        private void drawVisibleHorizontalLines(Graphics g, int gridSize) {
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE - 1; j++) {
-                    if (hLines[i][j]) {
-                        g.setColor(hLineColors[i][j]);
-                        g.fillRect((j + 1) * gridSize, (i + 1) * gridSize + 2, gridSize, LINE_WIDTH);
-                    }
-                }
-            }
-        }
-
         private void drawDots(Graphics g, int gridSize) {
             g.setColor(Color.BLACK);
             int dotSize = 12;
@@ -247,12 +206,8 @@ public class DotsAndBoxes {
             Font scoreFont = new Font("Arial", Font.BOLD, scoreFontSize);
             g.setFont(scoreFont);
             g.setColor(SCORE_FONT_COLOR);
-//            String playerScoreString = "Player: " + model.ownerCount(Player.HUMAN);
             int scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
             g.drawString(getScoreString(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
-//            g.drawString("Computer: " + model.ownerCount(Player.COMPUTER),
-//                    SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING),
-//                    scoreVerticalPosition);
             int gameInfoVerticalPosition = scoreVerticalPosition - scoreFontSize * 2;
             if (!model.gameIsOver()) {
                 g.drawString("Next Move: " + (model.humanTurn ? "Human" : "Computer"), SCORE_HORIZONTAL_POSITION, gameInfoVerticalPosition);
