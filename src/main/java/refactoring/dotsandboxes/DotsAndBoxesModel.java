@@ -1,7 +1,9 @@
 package refactoring.dotsandboxes;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 public class DotsAndBoxesModel {
@@ -76,30 +78,24 @@ public class DotsAndBoxesModel {
     }
 
     public Side mapToSide(GridPosition gridPosition) {
-
         if (gridPosition.horizontal() && gridPosition.row() == numRows) {
-            System.out.println("mapping to Box(row=" + (gridPosition.row()-1) + ",col=" + gridPosition.col() + ") bottom");
             return boxes[gridPosition.row() - 1][gridPosition.col()].bottom;
         }
         if (!gridPosition.horizontal() && (gridPosition.col() == numCols)) {
-            System.out.println("mapping to Box(row=" + gridPosition.row() + ",col=" + (gridPosition.col() - 1) + ") right");
             return boxes[gridPosition.row()][gridPosition.col() - 1].right;
         }
         Box box = boxes[gridPosition.row()][gridPosition.col()];
-        System.out.println("mapping to Box(row=" + gridPosition.row() + ",col=" + gridPosition.col());
         if (gridPosition.horizontal()) {
-            System.out.println("  horizontal -> top");
             return box.top;
         }
-        System.out.println("  vertical -> left");
         return box.left;
     }
 
     public Box[] getBoxes() {
-        return Arrays.stream(boxes).flatMap(Arrays::stream).toArray(Box[]::new);
+        return getBoxStream().toArray(Box[]::new);
     }
 
-    public boolean wasBoxCompletedByLastMove(Side side) {
+    public boolean wasBoxCompletedByMove(Side side) {
         for (Box box : boxesWithSide(side)) {
             if (box.isComplete() && box.getOwner() == Player.NONE) {
                 box.setOwner(side.getOwner());
@@ -110,9 +106,38 @@ public class DotsAndBoxesModel {
     }
 
     private Box[] boxesWithSide(Side side) {
-        return Arrays.stream(boxes)
-                .flatMap(Arrays::stream)
+        return getBoxStream()
                 .filter(box -> box.left == side || box.right == side || box.top == side || box.bottom == side)
                 .toArray(Box[]::new);
+    }
+
+    private Stream<Box> getBoxStream() {
+        return Arrays.stream(boxes)
+                .flatMap(Arrays::stream);
+    }
+
+    public List<Side> getUnownedSides() {
+        return getBoxStream()                // Stream<Box>
+                .map(box -> box.getUnownedSides()) // Stream<List<Side>>
+                .flatMap(List::stream)                  // Stream<Side>
+                .toList();
+    }
+
+    public Box findBoxWithNSides(int numberOfSidesOwned) {
+        return getBoxStream()                // Stream<Box>
+                .filter(box -> box.getOwnedSides().size() == numberOfSidesOwned) // Stream<Box>
+                .findFirst()                            // Optional<Box>
+                .orElse(null);
+    }
+
+    public boolean gameIsOver() {
+        return getBoxStream()
+                .allMatch(Box::isOwned);
+    }
+
+    public int ownerCount(Player player) {
+        return getBoxStream()
+                .filter(box -> box.getOwner() == player)
+                .toArray().length;
     }
 }

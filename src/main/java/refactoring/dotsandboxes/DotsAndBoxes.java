@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -23,244 +21,38 @@ public class DotsAndBoxes {
     private char[][] boxes = new char[SIZE - 1][SIZE - 1];
     private Color[][] hLineColors = new Color[SIZE][SIZE - 1];
     private Color[][] vLineColors = new Color[SIZE - 1][SIZE];
-    private int playerScore = 0, aiScore = 0;
     private boolean playerTurn = true;
-    private DotsAndBoxesModel dotsAndBoxesModel = new DotsAndBoxesModel(SIZE - 1, SIZE - 1);
+    private DotsAndBoxesModel model = new DotsAndBoxesModel(SIZE - 1, SIZE - 1);
+    private AIPlayer aiPlayer = new AIPlayer(model);
 
     public DotsAndBoxes(int numRows, int numCols) {
         frame = new JFrame("Dots and Boxes");
-        gamePanel = new GamePanel(dotsAndBoxesModel);
+        gamePanel = new GamePanel(model);
         frame.add(gamePanel);
         frame.setSize(DEFAULT_DISPLAY_SIZE, DEFAULT_DISPLAY_SIZE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
-        MouseAdapter mouseAdapter = createMouseHandler();
-        frame.addMouseListener(mouseAdapter);
-        frame.addMouseMotionListener(mouseAdapter);
         frame.setVisible(true);
-    }
-
-    private MouseAdapter createMouseHandler() {
-        return new MouseAdapter() {
-            GridPosition hoveredLine = null;
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (playerTurn && handleClick(e.getX(), e.getY())) {
-                    System.out.println(e.getX() + " " + e.getY());
-                    gamePanel.repaint();
-                    if (!checkForCompletion()) {
-                        playerTurn = false;
-                        SwingUtilities.invokeLater(() -> aiMove());
-                    }
-                }
-            }
-        };
-
-    }
-
-    private boolean handleClick(int x, int y) {
-//        int gridSize = frame.getWidth() / (SIZE + 1);
-        int gridSize = min(frame.getWidth(), frame.getHeight() - gamePanel.scorePanelHeight) / (SIZE + 1);
-
-        int margin = gridSize / 3; // Expanded margin for easier clicking
-
-        double minDistance = Double.MAX_VALUE;
-        int[] selectedLine = null;
-
-        // Check horizontal lines
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (!hLines[i][j]) {
-                    int x1 = (j + 1) * gridSize;
-                    int y1 = (i + 1) * gridSize;
-                    int x2 = (j + 2) * gridSize;
-                    int y2 = y1;
-                    double distance = pointToSegmentDistance(x, y, x1, y1, x2, y2);
-                    if (distance < minDistance && distance <= margin) {
-                        minDistance = distance;
-                        selectedLine = new int[]{0, i, j};
-                    }
-                }
-            }
-        }
-
-        // Check vertical lines
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (!vLines[i][j]) {
-                    int x1 = (j + 1) * gridSize;
-                    int y1 = (i + 1) * gridSize;
-                    int x2 = x1;
-                    int y2 = (i + 2) * gridSize;
-                    double distance = pointToSegmentDistance(x, y, x1, y1, x2, y2);
-                    if (distance < minDistance && distance <= margin) {
-                        minDistance = distance;
-                        selectedLine = new int[]{1, i, j};
-                    }
-                }
-            }
-        }
-
-        if (selectedLine != null) {
-            if (selectedLine[0] == 0) {
-                hLines[selectedLine[1]][selectedLine[2]] = true;
-                hLineColors[selectedLine[1]][selectedLine[2]] = Color.MAGENTA;
-            } else {
-                vLines[selectedLine[1]][selectedLine[2]] = true;
-                vLineColors[selectedLine[1]][selectedLine[2]] = Color.MAGENTA;
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-    private double pointToSegmentDistance(int px, int py, int x1, int y1, int x2, int y2) {
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        if (dx == 0 && dy == 0) {
-            return Math.hypot(px - x1, py - y1);
-        }
-        double t = ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy);
-        t = max(0, min(1, t));
-        double projX = x1 + t * dx;
-        double projY = y1 + t * dy;
-        return Math.hypot(px - projX, py - projY);
     }
 
     private void aiMove() {
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean madeMove = false;
+                Side aiChosenMove;
                 do {
-                    madeMove = tryCompleteBox() || avoidGivingBox() || randomMove();
-                } while (madeMove && checkForCompletion());
-                playerTurn = true;
+                    aiChosenMove = aiPlayer.chooseMove();
+                    aiChosenMove.setOwner(Player.COMPUTER);
+                    gamePanel.repaint();
+                } while (!model.gameIsOver() && model.wasBoxCompletedByMove(aiChosenMove));
+                model.humanTurn = true;
+                gamePanel.repaint();
                 ((Timer) e.getSource()).stop();
             }
         });
         timer.setRepeats(false);
         timer.start();
-    }
-
-    private boolean tryCompleteBox() {
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (boxes[i][j] == '\0') {
-                    int missing = 0;
-                    if (!hLines[i][j]) missing++;
-                    if (!hLines[i + 1][j]) missing++;
-                    if (!vLines[i][j]) missing++;
-                    if (!vLines[i][j + 1]) missing++;
-
-                    if (missing == 1) {
-                        if (!hLines[i][j]) {
-                            hLines[i][j] = true;
-                            hLineColors[i][j] = Color.GREEN;
-                        } else if (!hLines[i + 1][j]) {
-                            hLines[i + 1][j] = true;
-                            hLineColors[i + 1][j] = Color.GREEN;
-                        } else if (!vLines[i][j]) {
-                            vLines[i][j] = true;
-                            vLineColors[i][j] = Color.GREEN;
-                        } else {
-                            vLines[i][j + 1] = true;
-                            vLineColors[i][j + 1] = Color.GREEN;
-                        }
-                        gamePanel.repaint();
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean avoidGivingBox() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (!hLines[i][j] && !wouldGiveBox(true, i, j)) {
-                    hLines[i][j] = true;
-                    hLineColors[i][j] = Color.GREEN;
-                    gamePanel.repaint();
-                    return true;
-                }
-            }
-        }
-
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (!vLines[i][j] && !wouldGiveBox(false, i, j)) {
-                    vLines[i][j] = true;
-                    vLineColors[i][j] = Color.GREEN;
-                    gamePanel.repaint();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean wouldGiveBox(boolean isHorizontal, int i, int j) {
-        if (isHorizontal) {
-            return (i > 0 && hLines[i - 1][j] && vLines[i - 1][j] && vLines[i - 1][j + 1]) ||
-                    (i < SIZE - 1 && hLines[i + 1][j] && vLines[i][j] && vLines[i][j + 1]);
-        } else {
-            return (j > 0 && vLines[i][j - 1] && hLines[i][j - 1] && hLines[i + 1][j - 1]) ||
-                    (j < SIZE - 1 && vLines[i][j + 1] && hLines[i][j] && hLines[i + 1][j]);
-        }
-    }
-
-    private boolean randomMove() {
-        Random rand = new Random();
-        List<int[]> possibleMoves = new ArrayList<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (!hLines[i][j]) {
-                    possibleMoves.add(new int[]{0, i, j});
-                }
-            }
-        }
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (!vLines[i][j]) {
-                    possibleMoves.add(new int[]{1, i, j});
-                }
-            }
-        }
-
-        if (!possibleMoves.isEmpty()) {
-            int[] move = possibleMoves.get(rand.nextInt(possibleMoves.size()));
-            if (move[0] == 0) {
-                hLines[move[1]][move[2]] = true;
-                hLineColors[move[1]][move[2]] = Color.GREEN;
-            } else {
-                vLines[move[1]][move[2]] = true;
-                vLineColors[move[1]][move[2]] = Color.GREEN;
-            }
-            gamePanel.repaint();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkForCompletion() {
-        boolean scored = false;
-        for (int i = 0; i < SIZE - 1; i++) {
-            for (int j = 0; j < SIZE - 1; j++) {
-                if (boxes[i][j] == '\0' && hLines[i][j] && hLines[i + 1][j] &&
-                        vLines[i][j] && vLines[i][j + 1]) {
-                    boxes[i][j] = playerTurn ? 'P' : 'C';
-                    if (playerTurn) playerScore++;
-                    else aiScore++;
-                    scored = true;
-                }
-            }
-        }
-        return scored;
     }
 
     private class GamePanel extends JPanel {
@@ -284,7 +76,7 @@ public class DotsAndBoxes {
             MouseAdapter mouseHandler = new MouseAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
-                    if (!dotsAndBoxesModel.humanTurn) {
+                    if (!DotsAndBoxes.this.model.humanTurn) {
                         return;
                     }
                     Side newHoveredSide = mapMouseToBoxSide(e.getPoint());
@@ -297,11 +89,10 @@ public class DotsAndBoxes {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     if (hoveredSide != null) {
-                        System.out.println("Clicked on side: " + hoveredSide);
-                        if (dotsAndBoxesModel.humanTurn) {
+                        if (DotsAndBoxes.this.model.humanTurn) {
                             hoveredSide.setOwner(Player.HUMAN);
-                            if (!dotsAndBoxesModel.wasBoxCompletedByLastMove(hoveredSide)) {
-                                dotsAndBoxesModel.humanTurn = false;
+                            if (!DotsAndBoxes.this.model.wasBoxCompletedByMove(hoveredSide)) {
+                                DotsAndBoxes.this.model.humanTurn = false;
                                 SwingUtilities.invokeLater(() -> aiMove());
                             }
                         }
@@ -316,7 +107,7 @@ public class DotsAndBoxes {
         Side mapMouseToBoxSide(Point p) {
             GridPosition gridPosition = mapMouseToGrid(p);
             if (gridPosition != null) {
-                return dotsAndBoxesModel.mapToSide(gridPosition);
+                return DotsAndBoxes.this.model.mapToSide(gridPosition);
             }
             return null;
         }
@@ -329,13 +120,13 @@ public class DotsAndBoxes {
             if (x < 0 || y < 0) {
                 return null;
             }
-            if (x > gridSize * dotsAndBoxesModel.numCols ||
-                    y > gridSize * dotsAndBoxesModel.numRows) {
+            if (x > gridSize * DotsAndBoxes.this.model.numCols ||
+                    y > gridSize * DotsAndBoxes.this.model.numRows) {
                 return null;
             }
 
-            int col = min(x / gridSize, dotsAndBoxesModel.numCols);
-            int row = min(y / gridSize, dotsAndBoxesModel.numRows);
+            int col = min(x / gridSize, DotsAndBoxes.this.model.numCols);
+            int row = min(y / gridSize, DotsAndBoxes.this.model.numRows);
 
             int margin = 20;  // hover sensitivity in pixels
             int yOffset = y % gridSize;
@@ -456,11 +247,36 @@ public class DotsAndBoxes {
             Font scoreFont = new Font("Arial", Font.BOLD, scoreFontSize);
             g.setFont(scoreFont);
             g.setColor(SCORE_FONT_COLOR);
-            String playerScoreString = "Player: " + playerScore;
+//            String playerScoreString = "Player: " + model.ownerCount(Player.HUMAN);
             int scoreVerticalPosition = frame.getHeight() - scorePanelHeight;
-            g.drawString(playerScoreString, SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
-            g.drawString("Computer: " + aiScore, SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING), scoreVerticalPosition);
-            g.drawString("Player's Turn: " + (dotsAndBoxesModel.humanTurn ? "Human" : "Computer"), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition - scoreFontSize * 2);
+            g.drawString(getScoreString(), SCORE_HORIZONTAL_POSITION, scoreVerticalPosition);
+//            g.drawString("Computer: " + model.ownerCount(Player.COMPUTER),
+//                    SCORE_HORIZONTAL_POSITION + (playerScoreString.length() * scoreFontSize + SCORE_PADDING),
+//                    scoreVerticalPosition);
+            int gameInfoVerticalPosition = scoreVerticalPosition - scoreFontSize * 2;
+            if (!model.gameIsOver()) {
+                g.drawString("Next Move: " + (model.humanTurn ? "Human" : "Computer"), SCORE_HORIZONTAL_POSITION, gameInfoVerticalPosition);
+            } else {
+                g.drawString(getGameOutcomeMessage(), SCORE_HORIZONTAL_POSITION,  gameInfoVerticalPosition);
+            }
+        }
+
+        private String getGameOutcomeMessage() {
+            String winner;
+            int playerScore = model.ownerCount(Player.HUMAN);
+            int computerScore = model.ownerCount(Player.COMPUTER);
+            if (playerScore > computerScore) {
+                winner = "Player Wins!";
+            } else if (computerScore > playerScore) {
+                winner = "Computer Wins!";
+            } else {
+                winner = "It's a Tie!";
+            }
+            return "Game Over! " + winner;
+        }
+
+        private String getScoreString() {
+            return "Human: " + model.ownerCount(Player.HUMAN) + " | Computer: " + model.ownerCount(Player.COMPUTER);
         }
     }
 
