@@ -84,6 +84,10 @@ public class DotsAndBoxesModel {
         if (!gridPosition.horizontal() && (gridPosition.col() == numCols)) {
             return boxes[gridPosition.row()][gridPosition.col() - 1].right;
         }
+        if (gridPosition.row() == numRows || gridPosition.col() == numCols) {
+            // something is wrong here...
+            return null;
+        }
         Box box = boxes[gridPosition.row()][gridPosition.col()];
         if (gridPosition.horizontal()) {
             return box.top;
