@@ -9,9 +9,9 @@ public class DotsAndBoxesGame {
 
     public DotsAndBoxesGame(int numRows, int numCols, DotsAndBoxesModel model, AIPlayer aiPlayer) {
         frame = new JFrame("Dots and Boxes");
-        gamePanel = new DotsAndBoxesGamePanel(numRows, numCols, model, aiPlayer);
+        gamePanel = new DotsAndBoxesGamePanel(model, aiPlayer);
         frame.add(gamePanel);
-        frame.setSize(DEFAULT_BOX_SIZE * numRows, DEFAULT_BOX_SIZE * numCols);
+        frame.setSize(DEFAULT_BOX_SIZE * (numCols + 2), DEFAULT_BOX_SIZE * (numRows + 3));     // Plus 2 to allow room for score at the bottom
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
@@ -19,9 +19,10 @@ public class DotsAndBoxesGame {
     }
 
      static void main() {
-        int dimension = 3;
-        DotsAndBoxesModel model = new DotsAndBoxesModel(dimension - 1, dimension - 1);
+        int numRows = 2;
+        int numCols = 5;
+        DotsAndBoxesModel model = new DotsAndBoxesModel(numRows, numCols);
         AIPlayer aiPlayer = new AIPlayer(model);
-        SwingUtilities.invokeLater(() -> new DotsAndBoxesGame(dimension, dimension, model, aiPlayer));
+        SwingUtilities.invokeLater(() -> new DotsAndBoxesGame(numRows, numCols, model, aiPlayer));
     }
 }

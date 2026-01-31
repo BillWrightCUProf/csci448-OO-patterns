@@ -23,16 +23,14 @@ public class DotsAndBoxesGamePanel extends JPanel {
     static final Font BOX_OWNERS_FONT = new Font("Arial", Font.BOLD, 24);
     int scorePanelHeight;
     int scoreFontSize;
-    int SIZE ;
 
     private DotsAndBoxesModel model;
     private final AIPlayer aiPlayer;
     private Side hoveredSide;
 
-    DotsAndBoxesGamePanel(int numRows, int numCols, DotsAndBoxesModel model, AIPlayer aiPlayer) {
+    DotsAndBoxesGamePanel(DotsAndBoxesModel model, AIPlayer aiPlayer) {
         this.model = model;
         this.aiPlayer = aiPlayer;
-        this.SIZE = numRows;
 
         MouseAdapter mouseHandler = createMouseHandler();
         addMouseListener(mouseHandler);
@@ -95,8 +93,12 @@ public class DotsAndBoxesGamePanel extends JPanel {
         return null;
     }
 
+    private int getGridSize() {
+        return min(getWidth() /  (model.numCols + 2), (getHeight() - scorePanelHeight) / (model.numRows + 2));
+    }
+
     GridPosition mapMouseToGrid(Point p) {
-        int gridSize = min(getWidth(), getHeight() - scorePanelHeight) / (SIZE + 1);
+        int gridSize = getGridSize();
 
         int x = p.x - gridSize;
         int y = p.y - gridSize;
@@ -137,13 +139,10 @@ public class DotsAndBoxesGamePanel extends JPanel {
         super.paintComponent(g);
         scoreFontSize = max(MINIMUM_FONT_SIZE, getHeight() / FONT_SCALING_FACTOR);
         scorePanelHeight = scoreFontSize * 2 + SCORE_PADDING;
-        int gridSize = min(getWidth(), getHeight() - scorePanelHeight) / (SIZE + 1);
+        int gridSize = getGridSize();
 
         drawDots(g, gridSize);
         drawBoxes(g, gridSize);
-//            drawVisibleHorizontalLines(g, gridSize);
-//            drawVisibleVerticalLines(g, gridSize);
-//            drawBoxOwnersCharacter(g, gridSize);
         paintScorePanel(g);
 
         if (hoveredSide != null) {
@@ -182,8 +181,8 @@ public class DotsAndBoxesGamePanel extends JPanel {
     private void drawDots(Graphics g, int gridSize) {
         g.setColor(Color.BLACK);
         int dotSize = 12;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < model.numRows + 1; i++) {
+            for (int j = 0; j < model.numCols + 1; j++) {
                 int colXPosition = (j + 1) * gridSize - dotSize / 2;
                 int rowYPosition = (i + 1) * gridSize - dotSize / 2;
                 g.fillOval(colXPosition, rowYPosition, dotSize, dotSize);
