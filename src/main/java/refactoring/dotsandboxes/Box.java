@@ -48,4 +48,11 @@ public class Box {
     public void setOwner(Player owner) {
         this.owner = owner;
     }
+
+    public void clear() {
+        owner = Player.NONE;
+        for (Side side : getSides()) {
+            side.clear();
+        }
+    }
 }

@@ -144,4 +144,10 @@ public class DotsAndBoxesModel {
                 .filter(box -> box.getOwner() == player)
                 .toArray().length;
     }
+
+    public void clear() {
+        for (Box box : getBoxes()) {
+            box.clear();
+        }
+    }
 }

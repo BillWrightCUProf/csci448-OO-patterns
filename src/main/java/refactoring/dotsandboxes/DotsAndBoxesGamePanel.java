@@ -2,10 +2,7 @@ package refactoring.dotsandboxes;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -53,6 +50,12 @@ public class DotsAndBoxesGamePanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                // If double-click, start a new game.
+                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
+                    model.clear();
+                    repaint();
+                    return;
+                }
                 if (hoveredSide != null) {
                     if (model.humanTurn) {
                         hoveredSide.setOwner(Player.HUMAN);

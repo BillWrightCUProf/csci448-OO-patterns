@@ -51,4 +51,7 @@ public class Side {
         return owner == Player.COMPUTER;
     }
 
+    public void clear() {
+        owner = Player.NONE;
+    }
 }
