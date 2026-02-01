@@ -150,4 +150,10 @@ public class DotsAndBoxesModel {
             box.clear();
         }
     }
+
+    public List<Box> getBoxesSharingSide(Side side) {
+        return getBoxStream()
+                .filter(box -> box.left == side || box.right == side || box.top == side || box.bottom == side)
+                .toList();
+    }
 }

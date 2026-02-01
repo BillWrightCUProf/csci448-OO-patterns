@@ -61,6 +61,7 @@ public class DotsAndBoxesGamePanel extends JPanel {
                         hoveredSide.setOwner(Player.HUMAN);
                         if (!model.wasBoxCompletedByMove(hoveredSide)) {
                             model.humanTurn = false;
+                            repaint();
                             SwingUtilities.invokeLater(() -> aiMove());
                         }
                     }
