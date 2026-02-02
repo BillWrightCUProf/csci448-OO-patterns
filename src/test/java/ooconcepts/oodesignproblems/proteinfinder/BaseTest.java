@@ -12,4 +12,10 @@ class BaseTest {
         assertEquals("A", representation);
     }
 
+    @Test
+    void testCreationViaSingleCharacterString() {
+        Base base = Base.fromInitial("A");
+        assertEquals(Base.Adenine, base);
+    }
+
 }

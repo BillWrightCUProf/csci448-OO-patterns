@@ -1,17 +1,33 @@
 package ooconcepts.oodesignproblems.proteinfinder;
 
 public enum Base {
-    Adenine, Cytosine, Guanine, Thymine, Urasil;
+    Adenine("A"), Cytosine("C"), Guanine("G"), Thymine("T"), Urasil("U");
 
-    static Base fromDNAChar(char c) {
-        return switch (c) {
-            case 'A' -> Base.Adenine;
-            case 'C' -> Base.Cytosine;
-            case 'G' -> Base.Guanine;
-            case 'T' -> Base.Thymine;
-            case 'U' -> Base.Urasil;
-            default -> throw new IllegalArgumentException("Invalid base for DNA: " + c);
-        };
+    private final String displayName;
+
+    Base(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public static Base fromInitial(String initial) {
+        for (Base s : values()) {
+            if (s.displayName.equalsIgnoreCase(initial)) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("Unknown base: " + initial);    }
+
+    public static Base fromInitial(char name) {
+        for (Base s : values()) {
+            if (s.displayName.equalsIgnoreCase(name + "")) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("Unknown base: " + name);
     }
 
     public String code() {

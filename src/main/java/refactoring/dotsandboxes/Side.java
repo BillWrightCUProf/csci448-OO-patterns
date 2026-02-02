@@ -41,7 +41,7 @@ public class Side {
         String representation = "Side(" + row + ", " + col + ", " + orientation + ") owned by ";
         representation += switch (owner) {
             case NONE -> " ";
-            case HUMAN -> "P";
+            case HUMAN -> "H";
             case COMPUTER -> "C";
         };
         return representation;
@@ -51,4 +51,7 @@ public class Side {
         return owner == Player.COMPUTER;
     }
 
+    public void clear() {
+        owner = Player.NONE;
+    }
 }

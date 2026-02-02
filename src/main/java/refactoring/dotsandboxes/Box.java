@@ -21,9 +21,19 @@ public class Box {
         return owner;
     }
 
+    private List<Side> getSides() {
+        return List.of(left, right, top, bottom);
+    }
+
     public List<Side> getOwnedSides() {
-        return List.of(left, right, top, bottom).stream()
+        return getSides().stream()
                 .filter(side -> !side.unowned())
+                .toList();
+    }
+
+    public List<Side> getUnownedSides() {
+        return getSides().stream()
+                .filter(side -> side.unowned())
                 .toList();
     }
 
@@ -37,5 +47,12 @@ public class Box {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public void clear() {
+        owner = Player.NONE;
+        for (Side side : getSides()) {
+            side.clear();
+        }
     }
 }
