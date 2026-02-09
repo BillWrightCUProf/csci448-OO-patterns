@@ -3,6 +3,10 @@ package ooconcepts.oodesignproblems.wordle;
 import java.util.ArrayList;
 import java.util.List;
 
+// NOTE: I have another entire repo for this example, as I used it as a homework.
+// Refer to that repo if you think something is missing here.
+
+
 public class Wordle {
     static final int MAX_ATTEMPTS = 6;
     static final int WORD_LENGTH = 5;
