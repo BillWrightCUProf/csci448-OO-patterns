@@ -1,12 +1,11 @@
 package ooconcepts.oodesignproblems.cardgames;
 
-import java.util.ArrayList;
-
 public class Player {
-    private String name;
-    private Hand hand;
+    private final String name;
+    private Hand hand;  // This could just be a list of Cards: List<Card> hand;
 
     public Player(String name) {
+        this.name = name;
         this.hand = new Hand();
     }
 
