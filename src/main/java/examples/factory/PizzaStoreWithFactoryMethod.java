@@ -2,7 +2,7 @@ package examples.factory;
 
 public abstract class PizzaStoreWithFactoryMethod {
 
-    abstract Pizza createPizza(String item);
+    protected abstract Pizza createPizza(String item);
 
     public final Pizza orderPizza(String type) {
         Pizza pizza = createPizza(type);
