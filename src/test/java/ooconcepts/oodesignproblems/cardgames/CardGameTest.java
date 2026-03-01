@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class GameTest {
+class CardGameTest {
 
     @Test
     void testGinRummy() {
         List<Player> players = createPlayers(GinRummy.NUMBER_OF_PLAYERS);
         Deck deck = Deck.standardDeck();
-        Game game = new GinRummy(deck, players);
-        game.play();
+        CardGame cardGame = new GinRummy(deck, players);
+        cardGame.play();
     }
 
     @Test
     void testHearts() {
         List<Player> players = createPlayers(Hearts.NUMBER_OF_PLAYERS);
         Deck deck = Deck.standardDeck();
-        Game game = new Hearts(deck, players);
-        game.play();
+        CardGame cardGame = new Hearts(deck, players);
+        cardGame.play();
     }
 
     List<Player> createPlayers(int numPlayers) {

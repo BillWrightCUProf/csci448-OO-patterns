@@ -3,7 +3,6 @@ package ooconcepts.oodesignproblems.wordle;
 import java.io.IOException;
 
 public class PersistentWordLibrary extends WordLibrary {
-    String filePathToAvailableWords;
     String filePathToUsedWords;
 
     PersistentWordLibrary(String targetWordsFilePath, String guessWordsFilePath) throws IOException {

@@ -2,19 +2,18 @@ package ooconcepts.oodesignproblems.cardgames;
 
 import java.util.List;
 
-public class GinRummy extends Game {
+public class GinRummy extends CardGame {
     static int NUMBER_OF_PLAYERS = 2;
     static int NUMBER_CARDS_PER_STARTING_HAND = 10;
 
     GinRummy(Deck deck, List<Player> players) {
         super(deck, players);
+        assert players.size() == NUMBER_OF_PLAYERS : "Gin Rummy requires " + NUMBER_OF_PLAYERS + " players.";
     }
 
     @Override
     public void play() {
-        for (Player player : players) {
-            player.playTurn();
-        }
+        // Implementation of Gin Rummy game play logic
     }
 
     @Override
