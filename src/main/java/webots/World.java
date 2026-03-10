@@ -22,20 +22,29 @@ public class World implements IObservableWorld {
         this.width = width;
         this.height = length;
 
-        agentPositions.put(new TwoWheeledRobot(), getRandomPosition());
-        agentPositions.put(new FourWheeledRobot(), getRandomPosition());
-        agentPositions.put(new WalkingRobot(), getRandomPosition());
-        agentPositions.put(new QuadCopterRobot(), getRandomPosition());
+        TwoWheeledRobot robot = new TwoWheeledRobot();
+        FourWheeledRobot robot2 = new FourWheeledRobot();
+        WalkingRobot robot3 = new WalkingRobot();
+        QuadCopterRobot robot4 = new QuadCopterRobot();
+
+        addToRandomPosition(robot);
+        addToRandomPosition(robot2);
+        addToRandomPosition(robot3);
+        addToRandomPosition(robot4);
     }
 
     public World(int width, int length, RobotFactory robotFactory) {
         this.width = width;
         this.height = length;
 
-        agentPositions.put(robotFactory.createTwoWheeledRobot(), getRandomPosition());
-        agentPositions.put(robotFactory.createFourWheeledRobot(), getRandomPosition());
-        agentPositions.put(robotFactory.createWalkingRobot(), getRandomPosition());
-        agentPositions.put(robotFactory.createQuadCopterRobot(), getRandomPosition());
+        addToRandomPosition(robotFactory.createTwoWheeledRobot());
+        addToRandomPosition(robotFactory.createFourWheeledRobot());
+        addToRandomPosition(robotFactory.createWalkingRobot());
+        addToRandomPosition(robotFactory.createQuadCopterRobot());
+    }
+
+    private void addToRandomPosition(Agent agent) {
+        agentPositions.put(agent, getRandomPosition());
     }
 
     @Override
