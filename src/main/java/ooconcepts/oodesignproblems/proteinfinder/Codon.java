@@ -38,4 +38,9 @@ public class Codon {
     public int hashCode() {
         return Arrays.hashCode(bases);
     }
+
+    @Override
+    public String toString() {
+        return Arrays.stream(bases).map(Base::code).reduce("", (a, b) -> a + b);
+    }
 }

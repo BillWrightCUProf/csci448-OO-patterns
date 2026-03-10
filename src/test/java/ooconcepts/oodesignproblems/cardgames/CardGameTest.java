@@ -26,7 +26,7 @@ class CardGameTest {
 
     List<Player> createPlayers(int numPlayers) {
         List<Player> players = new ArrayList<>();
-        for (int i = 0; i < GinRummy.NUMBER_OF_PLAYERS; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             players.add(new Player("Player" + i));
         }
         return players;
