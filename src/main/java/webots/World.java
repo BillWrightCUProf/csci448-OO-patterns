@@ -1,5 +1,7 @@
 package webots;
 
+import webots.factory.RobotFactory;
+
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -19,6 +21,30 @@ public class World implements IObservableWorld {
     public World(int width, int length) {
         this.width = width;
         this.height = length;
+
+        TwoWheeledRobot robot = new TwoWheeledRobot();
+        FourWheeledRobot robot2 = new FourWheeledRobot();
+        WalkingRobot robot3 = new WalkingRobot();
+        QuadCopterRobot robot4 = new QuadCopterRobot();
+
+        addToRandomPosition(robot);
+        addToRandomPosition(robot2);
+        addToRandomPosition(robot3);
+        addToRandomPosition(robot4);
+    }
+
+    public World(int width, int length, RobotFactory robotFactory) {
+        this.width = width;
+        this.height = length;
+
+        addToRandomPosition(robotFactory.createTwoWheeledRobot());
+        addToRandomPosition(robotFactory.createFourWheeledRobot());
+        addToRandomPosition(robotFactory.createWalkingRobot());
+        addToRandomPosition(robotFactory.createQuadCopterRobot());
+    }
+
+    private void addToRandomPosition(Agent agent) {
+        agentPositions.put(agent, getRandomPosition());
     }
 
     @Override
