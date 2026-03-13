@@ -1,4 +1,4 @@
-package examples.template;
+package examples.template.mazedweller;
 
 public class TemplateCreature extends MazeDweller {
     public void collectItems() { System.out.println("Take things from dwellings..."); }

@@ -1,4 +1,4 @@
-package examples.template;
+package examples.template.mazedweller;
 
 public class Creature {
     public void seekAndDestroy() {

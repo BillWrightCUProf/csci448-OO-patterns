@@ -1,4 +1,4 @@
-package examples.template;
+package examples.template.mazedweller;
 
 abstract public class MazeDweller {
     public final void doYourThing() {

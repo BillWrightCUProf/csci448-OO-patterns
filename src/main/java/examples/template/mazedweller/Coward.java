@@ -1,4 +1,6 @@
-package examples.template;
+package examples.template.mazedweller;
+
+import examples.template.Adventurer;
 
 public class Coward extends Adventurer {
     @Override
