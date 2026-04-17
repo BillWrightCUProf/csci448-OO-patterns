@@ -25,6 +25,7 @@ public class ContainingClass {
 
         public void setContainingClassPrivateName(String name) {
             // This line is only allowed for non
+            this.name += name;
             ContainingClass.this.name = name;
         }
 

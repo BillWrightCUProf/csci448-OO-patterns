@@ -22,10 +22,12 @@ public class AIPlayer {
                     List<Box> boxesSharingSide = model.getBoxesSharingSide(side);
                     if (boxesSharingSide.size() == 1) {
                         System.out.println("Found a side that isn't share with other boxes!");
+                        side.setOwner(Player.COMPUTER);
                         return side;
                     }
                     if (boxesSharingSide.stream().allMatch(b -> b.getUnownedSides().size() != 2)) {
                         System.out.println("Found a side that is shared with other boxes with the same number of sides!");
+                        side.setOwner(Player.COMPUTER);
                         return side;
                     }
                 }

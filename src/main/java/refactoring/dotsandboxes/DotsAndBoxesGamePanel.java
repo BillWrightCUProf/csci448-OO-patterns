@@ -75,11 +75,12 @@ public class DotsAndBoxesGamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Side aiChosenMove;
-                do {
+                boolean makeAnotherMove = !model.gameIsOver();
+                while (makeAnotherMove) {
                     aiChosenMove = aiPlayer.chooseMove();
-                    aiChosenMove.setOwner(Player.COMPUTER);
+                    makeAnotherMove = !model.gameIsOver() && model.wasBoxCompletedByMove(aiChosenMove);
                     repaint();
-                } while (!model.gameIsOver() && model.wasBoxCompletedByMove(aiChosenMove));
+                }
                 model.humanTurn = true;
                 repaint();
                 ((Timer) e.getSource()).stop();
