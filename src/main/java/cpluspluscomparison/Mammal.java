@@ -7,4 +7,9 @@ public class Mammal extends Animal {
         super(name);
         this.laysEggs = laysEggs;
     }
+
+    @Override
+    public String getName() {
+        return "Mammal: " + super.getName();
+    }
 }

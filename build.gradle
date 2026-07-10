@@ -33,7 +33,7 @@ dependencies {
     implementation files('libs/PolymorphiaProfessorStrategy-0.1.0.jar')
 
     implementation 'com.google.inject:guice:5.0.1'
-    implementation 'org.springframework:spring-context:5.3.15'
+    implementation 'org.springframework:spring-context:5.3.39'
 
 
     testImplementation platform('org.junit:junit-bom:5.10.0')

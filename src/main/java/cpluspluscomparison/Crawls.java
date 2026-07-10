@@ -1,5 +1,7 @@
 package cpluspluscomparison;
 
 public interface Crawls {
-    void move();
+    default void move() {
+        System.out.println("Crawling");
+    }
 }

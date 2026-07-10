@@ -2,6 +2,8 @@ package cpluspluscomparison;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BatTest {
@@ -15,16 +17,25 @@ class BatTest {
     @Test
     void testFlyingAndCrawling() {
         Bat bat = new Bat("Bruce");
-        assertNotNull(bat);
-        bat.move(); // Should print "Bat is flying"
+        bat.move();
 
         Flies bat2 = new Bat("Bruce");
-        assertNotNull(bat2);
-        bat2.move(); // Should print "Bat is flying"
+        bat2.move();
 
         Crawls bat3 = new Bat("Bruce");
-        assertNotNull(bat3);
-        bat3.move(); // Should print "Bat is flying"
+        bat3.move();
+    }
+
+    @Test
+    void testPolymorphism() {
+        Animal bat = new Bat("Vampire");
+        Animal mammal = new Mammal("Canine", true);
+        Animal animal = new Animal("Insect");
+
+        List<Animal> animals = List.of(bat, mammal, animal);
+        for (Animal a : animals) {
+            System.out.println(a.getName());
+        }
     }
 
 }

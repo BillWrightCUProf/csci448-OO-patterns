@@ -1,5 +1,7 @@
 package cpluspluscomparison;
 
 public interface Flies {
-    void move();
+    default void move() {
+        System.out.println("Flying");
+    }
 }

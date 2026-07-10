@@ -7,6 +7,13 @@ public class Bat extends Mammal implements Flies, Crawls {
 
     @Override
     public void move() {
-        System.out.println("Bat is flying");
+        Flies.super.move();
+        Crawls.super.move();
+        System.out.println("Bat is flying or crawling");
+    }
+
+    @Override
+    public String getName() {
+        return "Bat: " + super.getName();
     }
 }
