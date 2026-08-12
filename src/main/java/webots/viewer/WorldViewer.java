@@ -46,4 +46,13 @@ public class WorldViewer extends JPanel {
             frame.setVisible(true);
         });
     }
+
+    public static void main(String[] args) {
+        webots.World world = new webots.World(800, 600);
+        webots.ObstacleFactory factory = new webots.ObstacleFactory();
+        world.addObstacle(factory.createSquare(100));
+        world.addObstacle(factory.createPentagon(100));
+        world.addObstacle(factory.createEquilateralTriangle(100));
+        display(world);
+    }
 }
