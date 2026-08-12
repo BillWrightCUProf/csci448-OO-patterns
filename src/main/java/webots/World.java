@@ -21,16 +21,6 @@ public class World implements IObservableWorld {
     public World(int width, int length) {
         this.width = width;
         this.height = length;
-
-        TwoWheeledRobot robot = new TwoWheeledRobot();
-        FourWheeledRobot robot2 = new FourWheeledRobot();
-        WalkingRobot robot3 = new WalkingRobot();
-        QuadCopterRobot robot4 = new QuadCopterRobot();
-
-        addToRandomPosition(robot);
-        addToRandomPosition(robot2);
-        addToRandomPosition(robot3);
-        addToRandomPosition(robot4);
     }
 
     @Override

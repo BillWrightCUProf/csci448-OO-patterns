@@ -12,7 +12,7 @@ public class ObstacleFactory {
         List<Position> vertices = List.of(
                 new Position(0, 0),
                 new Position(sideLength, 0),
-                new Position(sideLength / 2, (int) (sideLength * Math.cos(60)))
+                new Position(sideLength / 2, (int) (sideLength * Math.sin(Math.toRadians(60))))
         );
         return createNew(vertices);
     }

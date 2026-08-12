@@ -24,9 +24,9 @@ public class Obstacle implements Drawable {
 
         Position first = vertices.getFirst().translate(position);
         path.moveTo(first.x, first.y);
-        for (int i = 1; i < vertices.size(); i++) {
-            Position next = vertices.get(i).translate(position);
-            path.lineTo(next.x, next.y);
+        for (Position next : vertices.subList(1, vertices.size())) {
+            Position nextTranslated = next.translate(position);
+            path.lineTo(nextTranslated.x, nextTranslated.y);
         }
         path.closePath();
         return path;
@@ -37,7 +37,6 @@ public class Obstacle implements Drawable {
     }
 
     public boolean contains(Position position) {
-        // Implementation for checking if a position is within the obstacle
-        return false;
+        return toShape().contains(position.x, position.y);
     }
 }

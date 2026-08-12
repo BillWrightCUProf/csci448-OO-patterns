@@ -1,8 +1,6 @@
 package webots.viewer;
 
-import webots.Agent;
-import webots.IObservableWorld;
-import webots.SimpleRobot;
+import webots.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,8 +63,17 @@ public class WorldViewer extends JPanel {
         world.addObstacle(factory.createPentagon(100));
         world.addObstacle(factory.createEquilateralTriangle(100));
 
-        Agent robot = new SimpleRobot();
+        TwoWheeledRobot robot = new TwoWheeledRobot();
+        FourWheeledRobot robot2 = new FourWheeledRobot();
+        WalkingRobot robot3 = new WalkingRobot();
+        QuadCopterRobot robot4 = new QuadCopterRobot();
+        Agent robot5 = new SimpleRobot();
+
         world.addAgent(robot);
+        world.addAgent(robot2);
+        world.addAgent(robot3);
+        world.addAgent(robot4);
+        world.addAgent(robot5);
 
         display(world);
     }

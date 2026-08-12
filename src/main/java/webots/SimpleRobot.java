@@ -7,7 +7,7 @@ import webots.observer.RobotObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleRobot extends Agent {
+public class SimpleRobot extends Agent implements Positionable {
     List<RobotObserver> observers = new ArrayList<>();
 
     public void move() {
