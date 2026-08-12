@@ -7,8 +7,7 @@ import webots.observer.RobotObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleRobot implements Positionable, Observable {
-    private Position position;
+public class SimpleRobot extends Agent {
     List<RobotObserver> observers = new ArrayList<>();
 
     public void move() {
@@ -22,7 +21,6 @@ public class SimpleRobot implements Positionable, Observable {
         return false;
     }
 
-    @Override
     public void registerObserver(RobotObserver observer) {
         observers.add(observer);
     }
@@ -33,8 +31,12 @@ public class SimpleRobot implements Positionable, Observable {
         }
     }
 
-    @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public Vector getVelocity() {
+        return new Vector(0, 0);
     }
 }

@@ -6,19 +6,19 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.List;
 
-public class Obstacle {
+public class Obstacle implements Drawable {
     Position position;
     int orientation;
     List<Position> vertices;
 
-    Obstacle(Position position, int orientation, List<Position> vertices) {
+    public Obstacle(Position position, int orientation, List<Position> vertices) {
         this.position = position;
         this.orientation = orientation;
         assert vertices != null && vertices.size() > 2;
         this.vertices = vertices;
     }
 
-    Shape toShape() {
+    public Shape toShape() {
         Path2D path = new Path2D.Double();
         if (vertices.isEmpty()) return path;
 
@@ -34,5 +34,10 @@ public class Obstacle {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public boolean contains(Position position) {
+        // Implementation for checking if a position is within the obstacle
+        return false;
     }
 }

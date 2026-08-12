@@ -1,10 +1,10 @@
 package webots;
 
 public class RobotBuilder {
-    Robot robot;
+    Agent robot;
 
     RobotBuilder() {
-        robot = new Robot();
+        robot = new SimpleRobot();
     }
 
     void addMotor(Motor motor, Location location) {
@@ -17,7 +17,7 @@ public class RobotBuilder {
     public void addSensor(Sensor bumperSensor, Location location) {
     }
 
-    public Robot build() {
+    public Agent build() {
         return robot;
     }
 }

@@ -1,6 +1,8 @@
 package webots.viewer;
 
+import webots.Agent;
 import webots.IObservableWorld;
+import webots.SimpleRobot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +36,15 @@ public class WorldViewer extends JPanel {
             g2.draw(shape);
             g2.setColor(new Color(80, 100, 200, 180));
         }
+
+        // Draw agents
+        g2.setColor(Color.RED);
+        for (Shape agentShape : world.getAgents()) {
+            g2.fill(agentShape);
+            g2.setColor(Color.BLACK);
+            g2.draw(agentShape);
+            g2.setColor(Color.RED);
+        }
     }
 
     public static void display(IObservableWorld world) {
@@ -53,6 +64,10 @@ public class WorldViewer extends JPanel {
         world.addObstacle(factory.createSquare(100));
         world.addObstacle(factory.createPentagon(100));
         world.addObstacle(factory.createEquilateralTriangle(100));
+
+        Agent robot = new SimpleRobot();
+        world.addAgent(robot);
+
         display(world);
     }
 }

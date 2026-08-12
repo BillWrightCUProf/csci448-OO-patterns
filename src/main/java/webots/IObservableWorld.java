@@ -6,4 +6,5 @@ import java.awt.*;
 public interface IObservableWorld {
     Dimension getDimensions();
     List<Shape> getShapes();
+    List<Shape> getAgents();
 }

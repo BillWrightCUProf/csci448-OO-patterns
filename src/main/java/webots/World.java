@@ -33,6 +33,17 @@ public class World implements IObservableWorld {
         addToRandomPosition(robot4);
     }
 
+    @Override
+    public List<Shape> getAgents() {
+        List<Shape> shapes = new ArrayList<>();
+        for (Map.Entry<Agent, Position> entry : agentPositions.entrySet()) {
+            Agent agent = entry.getKey();
+            Position position = entry.getValue();
+            shapes.add(agent.getShape(position));
+        }
+        return shapes;
+    }
+
     public World(int width, int length, RobotFactory robotFactory) {
         this.width = width;
         this.height = length;
@@ -66,6 +77,27 @@ public class World implements IObservableWorld {
     public int getRandomHeading() {
         // In degrees
         return random.nextInt(360);
+    }
+
+    public void addAgent(Agent agent) {
+        agentPositions.put(agent, getRandomPositionAwayFromObstacles());
+    }
+
+    private Position getRandomPositionAwayFromObstacles() {
+        Position position;
+        do {
+            position = getRandomPosition();
+        } while (isPositionNearObstacle(position));
+        return position;
+    }
+
+    private boolean isPositionNearObstacle(Position position) {
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.contains(position)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addAgent(Agent agent, Position initialPosition) {
@@ -110,5 +142,20 @@ public class World implements IObservableWorld {
     public void addObstacle(Obstacle obstacle) {
         obstacles.add(obstacle);
         obstacle.setPosition(getRandomPosition());
+    }
+
+    public void addObstacle(Obstacle obstacle, Position position) {
+        obstacles.add(obstacle);
+        if (position == null) {
+            position = getRandomPosition();
+        }
+        if (isOutOfBounds(position)) {
+            position = getRandomPosition();
+        }
+        obstacle.setPosition(position);
+    }
+
+    private boolean isOutOfBounds(Position position) {
+        return position.x < 0 || position.x > width || position.y < 0 || position.y > height;
     }
 }

@@ -1,10 +1,10 @@
 package webots;
 
 public class RobotBuilderFluent {
-    Robot robot;
+    Agent robot;
 
     RobotBuilderFluent() {
-        robot = new Robot();
+        robot = new SimpleRobot();
     }
 
     RobotBuilderFluent addMotor(Motor motor, Location location) {
@@ -19,7 +19,7 @@ public class RobotBuilderFluent {
         return this;
     }
 
-    Robot build() {
+    Agent build() {
         return robot;
     }
 }

@@ -21,7 +21,7 @@ class RobotBuilderTest {
         builder.addSensor(new BumperSensor(orientationInDegrees), Location.BACK_CENTER);
         builder.addSensor(new UltraSoundSensor(), Location.FRONT_CENTER);
 
-        Robot robot = builder.build();
+        Agent robot = builder.build();
         robot.run();
     }
 
@@ -31,7 +31,7 @@ class RobotBuilderTest {
         int frontWheelDiameterInInches = 1;
         int orientationInDegrees = 0;
 
-        Robot robot = new RobotBuilderFluent()
+        Agent robot = new RobotBuilderFluent()
                 .addWheel(new Wheel(backWheelDiameterInInches), Location.BACK_LEFT)
                 .addWheel(new Wheel(backWheelDiameterInInches), Location.BACK_RIGHT)
                 .addMotor(new StepperMotor(), Location.BACK_LEFT)
