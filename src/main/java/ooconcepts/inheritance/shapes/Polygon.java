@@ -14,6 +14,17 @@ abstract public class Polygon {
         this.sides = sides;
     }
 
+    static Polygon newShape(int width, int height, int sides) {
+        switch (sides) {
+            case 3:
+                return new Triangle(width, height);
+            case 4:
+                return new Rectangle(width, height);
+            default:
+                throw new IllegalArgumentException("Unsupported number of sides: " + sides);
+        }
+    }
+
     abstract int area();
 
     void printSides() {
