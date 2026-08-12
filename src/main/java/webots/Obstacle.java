@@ -24,6 +24,10 @@ public class Obstacle implements Drawable {
 
         Position first = vertices.getFirst().translate(position);
         path.moveTo(first.x, first.y);
+        // This creates a new unmodifiable list, which is unnecessary. We can just use subList to iterate over the remaining vertices.
+//        List<Position> restOfVertices = vertices.stream()
+//                .skip(1)
+//                .toList();
         for (Position next : vertices.subList(1, vertices.size())) {
             Position nextTranslated = next.translate(position);
             path.lineTo(nextTranslated.x, nextTranslated.y);
