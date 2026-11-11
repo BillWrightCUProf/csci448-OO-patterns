@@ -26,7 +26,7 @@ public class DotsAndBoxes {
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (playerTurn && handleClick(e.getX(), e.getY())) {

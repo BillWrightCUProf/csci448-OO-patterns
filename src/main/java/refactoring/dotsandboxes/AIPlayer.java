@@ -21,7 +21,7 @@ public class AIPlayer {
                 for (Side side : box.getUnownedSides()) {
                     List<Box> boxesSharingSide = model.getBoxesSharingSide(side);
                     if (boxesSharingSide.size() == 1) {
-                        System.out.println("Found a side that isn't share with other boxes!");
+                        System.out.println("Found a side that isn't shared with other boxes!");
                         side.setOwner(Player.COMPUTER);
                         return side;
                     }
@@ -30,6 +30,7 @@ public class AIPlayer {
                         side.setOwner(Player.COMPUTER);
                         return side;
                     }
+                    System.out.println("Found a side that is shared with other boxes, but those boxes have 2 unowned sides. Skipping this side.");
                 }
             }
         }
@@ -41,6 +42,8 @@ public class AIPlayer {
         RandomGenerator randomGenerator = new Random();
         List<Side> unownedSides = model.getUnownedSides();
         int index = randomGenerator.nextInt(unownedSides.size());
-        return unownedSides.get(index);
+        Side chosenSide = unownedSides.get(index);
+        chosenSide.setOwner(Player.COMPUTER);
+        return chosenSide;
     }
 }
