@@ -1,5 +1,6 @@
 package examples.decorator;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ public class Mocha extends DecoratedBeverage {
     private static Map<Size, Double> ADDITIONAL_COSTS;
 
     static {
-        ADDITIONAL_COSTS = new HashMap<>();
+        ADDITIONAL_COSTS = new EnumMap<>(Size.class);
         ADDITIONAL_COSTS.put(Size.TALL, 0.00);
         ADDITIONAL_COSTS.put(Size.GRANDE, 0.10);
         ADDITIONAL_COSTS.put(Size.VENTI, 0.20);

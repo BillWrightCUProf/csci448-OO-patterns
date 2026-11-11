@@ -3,6 +3,8 @@ package examples.state.gumball;
 import examples.state.gumballV2.State;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class StateGumballMachineTest {
 
     @Test
@@ -51,6 +53,18 @@ class StateGumballMachineTest {
         gumballMachine.turnCrank();
 
         System.out.println(gumballMachine);
+    }
+
+    @Test()
+    void testStateGumBallMachineWithNothingInItExposesFaultyInitialization() {
+        System.out.println("***** Testing GumBallMachine that uses State Pattern *****");
+        StateGumballMachine gumballMachine = new StateGumballMachine(0);
+
+        System.out.println(gumballMachine);
+
+        assertThrows(NullPointerException.class, () ->
+                gumballMachine.insertQuarter()
+        );
     }
 
     @Test

@@ -14,13 +14,30 @@ In this version we’ll implement the method loseHealth() and call it on a chara
 Later this will be a private method (encapsulation) and so will getHealth(). We’ll replace with fight(creature) and isAlive()
 
 ## Homework 2: Expanding Polymorphia - Polymorphia, Maze (2x2), Room, Character superclass
-### Learning Objectives: DRY, Inheritance, Encapsulation, Small Methods
-Elements: Adventurers, Creatures, Food, 2x2 Maze		
+### Learning Objectives: 
+* DRY
+* Inheritance
+* Encapsulation
+* Small Methods
+
+### Elements Added
+*Adventurers
+* Creatures
+* Food
+* 2x2 Maze		
 
 ## Homework 3: Two Sources of Truth, Encapsulation, Dependency Injection and Die Injection, Logging
-Learning Objectives: Dependency Injection, Logging, Documenting the five concepts in the homework description
+### Learning Objectives: 
+* Dependency Injection
+* Logging
+* Documenting the five concepts in the homework description
+* Reliable Tests
+
+### New Elements: 
+* 9x9 Maze
+* Die Injection (fixed and random)
+
 Removing “new” keywords and System.out.println statements from our code
-New Elements: 9x9 Maze
 
 ## Homework 4: BDD, TDD, Die Injection
 Learning Objectives: BDD, TDD, and Die Injection
@@ -38,22 +55,57 @@ Creature now move (move, initial health range 5-10)
 Demons (fight, move, initial health range: 10-15)
 Food values between 1.0 and 2.0
 
-## Homework 5: Extending Polymorphia and Adding the Factory and Builder Patterns
-Learning Objectives: Using Factories and a Builder to create a general Maze that codes to abstractions
-New Elements:
-Cowards(eat, move), Gluttons (eat, fight, move), Fighters (fight, eat, move)
-Creature now move (move, initial health range 5-10)
-Demons (fight, move, initial health range: 10-15)
-N-room, fully-connected maze
-N-room, m-connection maze
-Food values between 1.0 and 2.0
+## Homework 4B: Factory Pattern and Extending Polymorphia
+
+### Learning Objectives: 
+* Factory Pattern 
+* Object-Oriented Design
+* Polymorphism
+* Inheritance
+
+### New Elements:
+* Cowards(eat, move)
+* Gluttons (eat, fight, move)
+* Fighters (fight, eat, move)
+* Demons (fight, move, initial health range: 10-15)
+* Food values between 1.0 and 2.0
+
+## Homework 5: BDD and the Builder Pattern
+### Learning Objectives: 
+* Using the Builder Pattern to create a general Maze that codes to abstractions
+* BDD for adding new behaviors to the game
+
+### New Elements:
+* N-room, fully connected maze
+* N-room, ring maze
+* connect one maze to another maze
+* N-room  line of rooms
+
 
 ## Homework 6: Aggregation Over Inheritance via the Strategy Pattern
-Learning Objectives: Strategy Pattern, UML Diagram, Changing Strategies
+
+### Learning Objectives
+* Strategy Pattern
+* UML Diagram
+* Changing Strategies
+
+### New Elements:
+* Changing the strategy of a character at runtime
+* If a character finds a map, then they become a Seeker.
+* If a glutton kills a creature, then they will become a Fighter
+
 
 ## Homework 7: Adding the Observer, Adaptor, and Singleton Patterns
-Learning Objectives: Multithreading, Observer, Adaptor Patterns, Optional MessageBus
-Adding in AudibleObserver and MazeObserver
+### Learning Objectives: 
+* Multithreading 
+* Observer Pattern
+* Adaptor Pattern
+* Singleton Pattern
+* MessageBus
+
+### New Elements:
+* Adding an AudibleObserver
+* Adding a console observer
 
 Use the same Observer pattern for both Audible and Console
 
@@ -61,8 +113,6 @@ Homework 7: Writing Maze Displayer
 Learning Objectives:
 Write a Swing-based displayer
 
-Add the ability to create a line of rooms and attach it to a room in the MazeBuilder.
-Add the ability to create a ring of rooms and attach it to a room in the MazeBuilder.
 Improving the maze drawing to handle the above – give it hints like:
 
 {drawLinearly: [room1, room2, room3], drawAsRing: [room4, room5, room6], layoutRadially: [room7, room8, room9]} and it would look like this:
@@ -94,6 +144,7 @@ Invisibility Cloak
 Reincarnation potion
 Cloning – split health points
 Sword
+new Die with more sides
 
 Magic Room that loses one neighbor per query of getRooms() until it gets to zero and then ramps back up
 

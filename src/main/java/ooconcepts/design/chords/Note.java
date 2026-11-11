@@ -1,6 +1,6 @@
 package ooconcepts.design.chords;
 
-public enum Note {
+public enum Note implements INote {
     A(0, "A"),
     ASharp(1, "A#"),
     B(2, "B"),
@@ -26,7 +26,17 @@ public enum Note {
         return semitoneValue;
     }
 
+    public Note getNextNote(Interval interval) {
+        int nextSemitoneValue = (this.semitoneValue + interval.getSemitoneCount()) % 12;
+        return Note.values()[nextSemitoneValue];
+    }
+
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }

@@ -1,12 +1,16 @@
 package ooconcepts.design.chords;
 
 public class Interval {
-    String name;
-    int distanceInSemitones;
+    private String name;
+    private int distanceInSemitones;
 
     public Interval(String name, int distanceInSemitones) {
         this.name = name;
         this.distanceInSemitones = distanceInSemitones;
+    }
+
+    public int getSemitoneCount() {
+        return distanceInSemitones;
     }
 
     public static Interval halfStep() { return new Interval("Half Step", 1); };

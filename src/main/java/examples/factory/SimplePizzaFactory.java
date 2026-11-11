@@ -20,4 +20,16 @@ public class SimplePizzaFactory {
         }
         return pizza;
     }
+
+    public Pizza createCheesePizza() {
+        return new CheesePizza();
+    }
+
+    public Pizza createGreekPizza() {
+        return new GreekPizza();
+    }
+
+    public Pizza createPepperoniPizza() {
+        return new PepperoniPizza();
+    }
 }

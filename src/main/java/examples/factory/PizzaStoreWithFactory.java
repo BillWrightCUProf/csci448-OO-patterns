@@ -17,4 +17,20 @@ public class PizzaStoreWithFactory {
 
         return pizza;
     }
+
+    public Pizza orderPizza2(String type) {
+
+        Pizza pizza = switch (type) {
+            case "cheese" -> factory.createCheesePizza();
+            case "greek" -> factory.createGreekPizza();
+            default -> factory.createPepperoniPizza();
+        };
+
+        pizza.prepare();
+        pizza.bake();
+        pizza.cut();
+        pizza.box();
+
+        return pizza;
+    }
 }

@@ -1,5 +1,7 @@
 package examples.factory;
 
+import examples.factory.solution.NewYorkCheesePizza;
+
 public class PizzaStore {
 //    Pizza orderPizza1(String type) {
 //        Pizza pizza;
@@ -19,6 +21,12 @@ public class PizzaStore {
 //        return pizza;
 //    }
 
+    Pizza createPizza(String type) {
+        return switch (type) {
+            case "Chicago" -> new ChicagoCheesePizza();
+            default -> new NewYorkCheesePizza();
+        };
+    }
     Pizza orderPizza2(String type) {
         Pizza pizza;
         if (type.equals("cheese")) {

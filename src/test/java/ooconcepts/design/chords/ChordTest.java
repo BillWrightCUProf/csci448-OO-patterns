@@ -9,6 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChordTest {
 
+    @Test
+    void createCMajorTriad() {
+        Chord cMajorTriad = Chord.majorTriad(Note.C);
+        assertEquals(cMajorTriad.notes, List.of(Note.C, Note.E, Note.G), "C Major Triad should consist of C, E, and G");
+    }
+
     @Disabled
     void recognizeCMajorChord() {
         List<Note> unknownChordNotes = List.of(

@@ -20,8 +20,8 @@ public class StateGumballMachine {
         this.count = numberGumballs;
         if (numberGumballs > 0) {
             currentState = noQuarterState;
-        } else {
-            currentState = soldOutState;
+//        } else {
+//            currentState = soldOutState;
         }
     }
 
