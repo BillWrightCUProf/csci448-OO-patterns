@@ -98,40 +98,40 @@ public class DotsAndBoxesGamePanel extends JPanel {
         return null;
     }
 
-    private int getGridSize() {
+    private int getGridCellSizeInPixels() {
         return min(getWidth() /  (model.numCols + 2), (getHeight() - scorePanelHeight) / (model.numRows + 2));
     }
 
     GridPosition mapMouseToGrid(Point p) {
-        int gridSize = getGridSize();
+        int gridCellSizeInPixels = getGridCellSizeInPixels();
 
-        int x = p.x - gridSize;
-        int y = p.y - gridSize;
+        int x = p.x - gridCellSizeInPixels;
+        int y = p.y - gridCellSizeInPixels;
         if (x < 0 || y < 0) {
             return null;
         }
-        if (x > gridSize * model.numCols ||
-                y > gridSize * model.numRows) {
+        if (x > gridCellSizeInPixels * model.numCols ||
+                y > gridCellSizeInPixels * model.numRows) {
             return null;
         }
 
-        int col = min(x / gridSize, model.numCols);
-        int row = min(y / gridSize, model.numRows);
+        int col = min(x / gridCellSizeInPixels, model.numCols);
+        int row = min(y / gridCellSizeInPixels, model.numRows);
 
         int margin = 20;  // hover sensitivity in pixels
-        int yOffset = y % gridSize;
-        int distanceToNearestHorizontalLine = Math.min(yOffset, gridSize - yOffset);
+        int yOffset = y % gridCellSizeInPixels;
+        int distanceToNearestHorizontalLine = Math.min(yOffset, gridCellSizeInPixels - yOffset);
         if (distanceToNearestHorizontalLine < margin) {
-            if (gridSize - yOffset < yOffset) {
+            if (gridCellSizeInPixels - yOffset < yOffset) {
                 row++;
             }
             return new GridPosition(row, col, true);
         }
 
-        int xOffset = x % gridSize;
-        int distanceToNearestVerticalLine = Math.min(xOffset, gridSize - xOffset);
+        int xOffset = x % gridCellSizeInPixels;
+        int distanceToNearestVerticalLine = Math.min(xOffset, gridCellSizeInPixels - xOffset);
         if (distanceToNearestVerticalLine < margin) {
-            if (gridSize - xOffset < xOffset) {
+            if (gridCellSizeInPixels - xOffset < xOffset) {
                 col++;
             }
             return new GridPosition(row, col, false);
@@ -144,7 +144,7 @@ public class DotsAndBoxesGamePanel extends JPanel {
         super.paintComponent(g);
         scoreFontSize = max(MINIMUM_FONT_SIZE, getHeight() / FONT_SCALING_FACTOR);
         scorePanelHeight = scoreFontSize * 2 + SCORE_PADDING;
-        int gridSize = getGridSize();
+        int gridSize = getGridCellSizeInPixels();
 
         drawDots(g, gridSize);
         drawBoxes(g, gridSize);
